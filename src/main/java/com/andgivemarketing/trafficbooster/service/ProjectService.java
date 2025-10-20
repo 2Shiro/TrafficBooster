@@ -27,30 +27,26 @@ public class ProjectService {
         return projectRepository.findByName(name).orElse(null);
     }
 
-    // id로 프로젝트Entity 조회
+    // id로 프로젝트 조회
     public ProjectEntity findById(Long id) {
         return projectRepository.findById(id).orElse(null);
     }
 
-    // id로 프로젝트DTO 조회 (DTO)
-    public ProjectDTO findDtoById(Long id) {
-        ProjectEntity projectEntity = findById(id);
-        return toDto(projectEntity);
-    }
-
     // Entity를 DTO로 변환
-    public static ProjectDTO toDto(ProjectEntity projectEntity) {
-        if (projectEntity == null) return null;
+    public static ProjectDTO parseDto(ProjectEntity projectEntity) {
+
         ProjectDTO projectDTO = new ProjectDTO();
+
         projectDTO.setId(projectEntity.getId());
         projectDTO.setName(projectEntity.getName());
         projectDTO.setStartedAt(projectEntity.getStartedAt());
         projectDTO.setState(projectEntity.getState());
-        projectDTO.setDailyTargetInflow(projectEntity.getDailyTargetInflow());
-        projectDTO.setTotalTargetInflow(projectEntity.getTotalTargetInflow());
+        projectDTO.setDailyTargetTrafficCount(projectEntity.getDailyTargetTrafficCount());
+        projectDTO.setTotalTargetTrafficCount(projectEntity.getTotalTargetTrafficCount());
         projectDTO.setTargetAddress(projectEntity.getTargetAddress());
         projectDTO.setCreatedAt(projectEntity.getCreatedAt());
         projectDTO.setUpdatedAt(projectEntity.getUpdatedAt());
+
         return projectDTO;
     }
 }

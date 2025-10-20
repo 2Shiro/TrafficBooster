@@ -5,17 +5,17 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class InflowDTO {
+public class TrafficSourceDTO {
 
     private Long id;
 
     private Long projectId;
 
-    private String inflowPath;
+    private String trafficSourcePath;
 
-    private Long hasScroll;
+    private boolean useScroll;
 
-    private Long durationTime;
+    private Long stayDurationTime;
 
     private LocalDateTime createAt;
 

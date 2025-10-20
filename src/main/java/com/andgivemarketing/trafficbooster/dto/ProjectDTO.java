@@ -18,9 +18,9 @@ public class ProjectDTO {
 
     private ProjectState state;
 
-    private Long dailyTargetInflow;
+    private Long dailyTargetTrafficCount;
 
-    private Long totalTargetInflow;
+    private Long totalTargetTrafficCount;
 
     private LocalDateTime createdAt;
 

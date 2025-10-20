@@ -31,15 +31,15 @@ public class ProjectEntity {
     @Column(name = "started_at")
     private LocalDateTime startedAt;
 
-    @Enumerated(EnumType.STRING)          // DB에 문자열로 저장 (권장)
+    @Enumerated(EnumType.STRING) // DB에 문자열로 저장
     @Column(name = "state")
     private ProjectState state;
 
-    @Column(name = "daily_target_inflow")
-    private Long dailyTargetInflow;
+    @Column(name = "daily_target_traffic_count")
+    private Long dailyTargetTrafficCount;
 
-    @Column(name = "total_target_inflow")
-    private Long totalTargetInflow;
+    @Column(name = "total_target_traffic_count")
+    private Long totalTargetTrafficCount;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

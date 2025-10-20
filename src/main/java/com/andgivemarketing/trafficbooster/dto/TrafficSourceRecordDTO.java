@@ -5,13 +5,13 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class InflowRecordDTO {
+public class TrafficSourceRecordDTO {
 
     private Long id;
 
     private Long projectId;
 
-    private Long inflowId;
+    private Long trafficSourceId;
 
     private String userAgent;
 

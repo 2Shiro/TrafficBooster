@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "inflow")
-public class InflowEntity {
+@Table(name = "traffic_source_record")
+public class TrafficSourceRecordEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,14 +24,14 @@ public class InflowEntity {
     @Column(name = "project_id")
     private Long projectId;
 
-    @Column(name = "inflow_path")
-    private String inflowPath;
+    @Column(name = "traffic_source_id")
+    private Long trafficSourceId;
 
-    @Column(name = "has_scroll")
-    private Long hasScroll;
+    @Column(name = "user_agent")
+    private String userAgent;
 
-    @Column(name = "duration_time")
-    private Long durationTime;
+    @Column(name = "ip")
+    private Long ip;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

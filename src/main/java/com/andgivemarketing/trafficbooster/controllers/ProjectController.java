@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -26,8 +27,8 @@ public class ProjectController {
                 || projectDTO.getName() == null || projectDTO.getName().isBlank()
                 || projectDTO.getTargetAddress() == null  || projectDTO.getTargetAddress().isBlank()
                 || projectDTO.getStartedAt() == null
-                || projectDTO.getDailyTargetInflow() == null
-                || projectDTO.getTotalTargetInflow() == null) {
+                || projectDTO.getDailyTargetTrafficCount() == null
+                || projectDTO.getTotalTargetTrafficCount() == null) {
             return ResponseEntity.status(400).body(new ErrorResponse(new ErrorResponse.ErrorDetails("올바르지 않은 요청입니다")));
         }
 
@@ -45,8 +46,8 @@ public class ProjectController {
                 .name(projectDTO.getName())
                 .targetAddress(projectDTO.getTargetAddress())
                 .startedAt(projectDTO.getStartedAt())
-                .dailyTargetInflow(projectDTO.getDailyTargetInflow())
-                .totalTargetInflow(projectDTO.getTotalTargetInflow())
+                .dailyTargetTrafficCount(projectDTO.getDailyTargetTrafficCount())
+                .totalTargetTrafficCount(projectDTO.getTotalTargetTrafficCount())
                 .createdAt(LocalDateTime.now())
                 .build();
 
@@ -60,7 +61,10 @@ public class ProjectController {
     @GetMapping("/project/get")
     public ResponseEntity<?> getProject(@RequestParam(name = "id") Long id) {
 
-        ProjectDTO projectDTO = projectService.findDtoById(id);
+        ProjectDTO projectDTO = Optional.ofNullable(projectService.findById(id))
+                .map(ProjectService::parseDto)
+                .orElse(null);
+
         if (projectDTO == null) {
             return ResponseEntity.status(404).body(new ErrorResponse(new ErrorResponse.ErrorDetails("해당 프로젝트를 찾을 수 없습니다")));
         }
@@ -78,8 +82,8 @@ public class ProjectController {
                 || projectDTO.getTargetAddress() == null  || projectDTO.getTargetAddress().isBlank()
                 || projectDTO.getStartedAt() == null
                 || projectDTO.getState() == null
-                || projectDTO.getDailyTargetInflow() == null
-                || projectDTO.getTotalTargetInflow() == null) {
+                || projectDTO.getDailyTargetTrafficCount() == null
+                || projectDTO.getTotalTargetTrafficCount() == null) {
             return ResponseEntity.status(400).body(new ErrorResponse(new ErrorResponse.ErrorDetails("올바르지 않은 요청입니다")));
         }
 
@@ -94,8 +98,8 @@ public class ProjectController {
         projectEntity.setTargetAddress(projectDTO.getTargetAddress());
         projectEntity.setStartedAt(projectDTO.getStartedAt());
         projectEntity.setState(projectDTO.getState());
-        projectEntity.setDailyTargetInflow(projectDTO.getDailyTargetInflow());
-        projectEntity.setTotalTargetInflow(projectDTO.getTotalTargetInflow());
+        projectEntity.setDailyTargetTrafficCount(projectDTO.getDailyTargetTrafficCount());
+        projectEntity.setTotalTargetTrafficCount(projectDTO.getTotalTargetTrafficCount());
         projectEntity.setUpdatedAt(LocalDateTime.now());
 
         projectService.save(projectEntity);
