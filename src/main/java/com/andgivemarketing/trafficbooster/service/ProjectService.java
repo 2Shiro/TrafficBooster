@@ -39,18 +39,18 @@ public class ProjectService {
     }
 
     // Entity를 DTO로 변환
-    public static ProjectDTO toDto(ProjectEntity e) {
-        if (e == null) return null;
-        ProjectDTO dto = new ProjectDTO();
-        dto.setId(e.getId());
-        dto.setName(e.getName());
-        dto.setStartedAt(e.getStartedAt());
-        dto.setState(e.getState());
-        dto.setDailyTargetInflow(e.getDailyTargetInflow());
-        dto.setTotalTargetInflow(e.getTotalTargetInflow());
-        dto.setTargetAddress(e.getTargetAddress());
-        dto.setCreatedAt(e.getCreatedAt());
-        dto.setUpdatedAt(e.getUpdatedAt());
-        return dto;
+    public static ProjectDTO toDto(ProjectEntity projectEntity) {
+        if (projectEntity == null) return null;
+        ProjectDTO projectDTO = new ProjectDTO();
+        projectDTO.setId(projectEntity.getId());
+        projectDTO.setName(projectEntity.getName());
+        projectDTO.setStartedAt(projectEntity.getStartedAt());
+        projectDTO.setState(projectEntity.getState());
+        projectDTO.setDailyTargetInflow(projectEntity.getDailyTargetInflow());
+        projectDTO.setTotalTargetInflow(projectEntity.getTotalTargetInflow());
+        projectDTO.setTargetAddress(projectEntity.getTargetAddress());
+        projectDTO.setCreatedAt(projectEntity.getCreatedAt());
+        projectDTO.setUpdatedAt(projectEntity.getUpdatedAt());
+        return projectDTO;
     }
 }
