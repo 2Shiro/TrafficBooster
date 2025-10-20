@@ -11,16 +11,18 @@ public class ProjectDTO {
 
     private String name;
 
+    private String targetAddress;
+
     private LocalDateTime startedAt;
 
-    private Enum state;
+    private Long state;
 
     private Long dailyTargetInflow;
 
     private Long totalTargetInflow;
 
-    private String targetAddress;
+    private LocalDateTime createdAt;
 
-    private LocalDateTime createAt;
+    private LocalDateTime updatedAt;
 
 }

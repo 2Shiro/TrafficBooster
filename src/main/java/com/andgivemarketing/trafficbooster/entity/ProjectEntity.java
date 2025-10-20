@@ -24,11 +24,14 @@ public class ProjectEntity {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "target_address")
+    private String targetAddress;
+
     @Column(name = "started_at")
     private LocalDateTime startedAt;
 
     @Column(name = "state")
-    private Enum state;
+    private Long state;
 
     @Column(name = "daily_target_inflow")
     private Long dailyTargetInflow;
@@ -36,9 +39,9 @@ public class ProjectEntity {
     @Column(name = "total_target_inflow")
     private Long totalTargetInflow;
 
-    @Column(name = "target_address")
-    private String targetAddress;
-
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }
