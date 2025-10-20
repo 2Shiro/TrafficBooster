@@ -13,7 +13,7 @@ public class InflowRecordDTO {
 
     private Long inflowId;
 
-    private String userAget;
+    private String userAgent;
 
     private Long ip;
 

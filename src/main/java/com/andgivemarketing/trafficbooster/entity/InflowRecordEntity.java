@@ -27,8 +27,8 @@ public class InflowRecordEntity {
     @Column(name = "inflow_id")
     private Long inflowId;
 
-    @Column(name = "user_aget")
-    private String userAget;
+    @Column(name = "user_agent")
+    private String userAgent;
 
     @Column(name = "ip")
     private Long ip;

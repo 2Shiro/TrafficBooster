@@ -4,6 +4,7 @@ import com.andgivemarketing.trafficbooster.dto.ErrorResponse;
 import com.andgivemarketing.trafficbooster.dto.ProjectDTO;
 import com.andgivemarketing.trafficbooster.entity.ProjectEntity;
 import com.andgivemarketing.trafficbooster.service.ProjectService;
+import com.andgivemarketing.trafficbooster.utils.GsonUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,6 +55,19 @@ public class ProjectController {
         return ResponseEntity.ok().build();
     }
 
+
+    // 프로젝트 조회
+    @GetMapping("/project/get")
+    public ResponseEntity<?> getProject(@RequestParam(name = "id") Long id) {
+
+        ProjectDTO projectDTO = projectService.findDtoById(id);
+        if (projectDTO == null) {
+            return ResponseEntity.status(404).body(new ErrorResponse(new ErrorResponse.ErrorDetails("해당 프로젝트를 찾을 수 없습니다")));
+        }
+
+        return ResponseEntity.ok(GsonUtils.gson.toJson(projectDTO));
+    }
+
     // 프로젝트 수정
     @PostMapping("/project/update")
     public ResponseEntity<?> updateProject(@RequestBody(required = false) ProjectDTO projectDTO) {
@@ -69,10 +83,10 @@ public class ProjectController {
             return ResponseEntity.status(400).body(new ErrorResponse(new ErrorResponse.ErrorDetails("올바르지 않은 이름입니다")));
         }
 
-        // 수정할 문제 조회
+        // 수정할 프로젝트 조회
         ProjectEntity projectEntity = projectService.findById(projectDTO.getId());
         if (projectEntity == null) {
-            return ResponseEntity.status(404).body(new ErrorResponse(new ErrorResponse.ErrorDetails("해당 문제를 찾을 수 없습니다")));
+            return ResponseEntity.status(404).body(new ErrorResponse(new ErrorResponse.ErrorDetails("해당 프로젝트를 찾을 수 없습니다")));
         }
 
         projectEntity = new ProjectEntity();
@@ -93,12 +107,12 @@ public class ProjectController {
     @PostMapping("/project/delete")
     public ResponseEntity<?> deleteProject(@RequestParam(name = "id") Long id) {
 
-        // 삭제할 문제 요청 id 확인
+        // 삭제할 프로젝트 요청 id 확인
         if (id == null) {
             return ResponseEntity.status(400).body(new ErrorResponse(new ErrorResponse.ErrorDetails("올바르지 않은 요청입니다")));
         }
 
-        // 문제 존재 여부 확인
+        // 프로젝트 존재 여부 확인
         if (projectService.findById(id) == null) {
             return ResponseEntity.status(404).body(new ErrorResponse(new ErrorResponse.ErrorDetails("존재하지 않는 프로젝트입니다")));
         }
