@@ -28,7 +28,7 @@ public class ProjectController {
                 || projectDTO.getStartedAt() == null
                 || projectDTO.getDailyTargetInflow() == null
                 || projectDTO.getTotalTargetInflow() == null) {
-            return ResponseEntity.status(400).body(new ErrorResponse(new ErrorResponse.ErrorDetails("올바르지 않은 이름입니다")));
+            return ResponseEntity.status(400).body(new ErrorResponse(new ErrorResponse.ErrorDetails("올바르지 않은 요청입니다")));
         }
 
         String name = projectDTO.getName();
@@ -40,11 +40,11 @@ public class ProjectController {
             return ResponseEntity.status(404).body(new ErrorResponse(new ErrorResponse.ErrorDetails("이미 존재하는 이름입니다")));
         }
 
+        // DB에서 state DEFAULT 'RUNNING'
         projectEntity = ProjectEntity.builder()
                 .name(projectDTO.getName())
                 .targetAddress(projectDTO.getTargetAddress())
                 .startedAt(projectDTO.getStartedAt())
-                .state(projectDTO.getState()) // 디폴트 값 0
                 .dailyTargetInflow(projectDTO.getDailyTargetInflow())
                 .totalTargetInflow(projectDTO.getTotalTargetInflow())
                 .createdAt(LocalDateTime.now())
@@ -80,7 +80,7 @@ public class ProjectController {
                 || projectDTO.getState() == null
                 || projectDTO.getDailyTargetInflow() == null
                 || projectDTO.getTotalTargetInflow() == null) {
-            return ResponseEntity.status(400).body(new ErrorResponse(new ErrorResponse.ErrorDetails("올바르지 않은 이름입니다")));
+            return ResponseEntity.status(400).body(new ErrorResponse(new ErrorResponse.ErrorDetails("올바르지 않은 요청입니다")));
         }
 
         // 수정할 프로젝트 조회

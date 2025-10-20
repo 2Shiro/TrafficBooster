@@ -1,5 +1,6 @@
 package com.andgivemarketing.trafficbooster.entity;
 
+import com.andgivemarketing.trafficbooster.enums.ProjectState;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,8 +31,9 @@ public class ProjectEntity {
     @Column(name = "started_at")
     private LocalDateTime startedAt;
 
+    @Enumerated(EnumType.STRING)          // DB에 문자열로 저장 (권장)
     @Column(name = "state")
-    private Long state;
+    private ProjectState state;
 
     @Column(name = "daily_target_inflow")
     private Long dailyTargetInflow;

@@ -1,5 +1,6 @@
 package com.andgivemarketing.trafficbooster.dto;
 
+import com.andgivemarketing.trafficbooster.enums.ProjectState;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ public class ProjectDTO {
 
     private LocalDateTime startedAt;
 
-    private Long state;
+    private ProjectState state;
 
     private Long dailyTargetInflow;
 
