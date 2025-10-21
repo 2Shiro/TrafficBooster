@@ -1,4 +1,4 @@
-package com.andgivemarketing.trafficbooster.dto;
+package com.andgivemarketing.trafficbooster.context.trafficsourcerecord.dto;
 
 import lombok.Data;
 

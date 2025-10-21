@@ -1,4 +1,4 @@
-package com.andgivemarketing.trafficbooster.utils;
+package com.andgivemarketing.trafficbooster.global.utils;
 
 
 import com.google.gson.*;

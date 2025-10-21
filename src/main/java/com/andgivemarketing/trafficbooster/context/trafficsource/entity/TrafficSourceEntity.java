@@ -1,4 +1,4 @@
-package com.andgivemarketing.trafficbooster.entity;
+package com.andgivemarketing.trafficbooster.context.trafficsource.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "traffic_source_record")
-public class TrafficSourceRecordEntity {
+@Table(name = "traffic_source")
+public class TrafficSourceEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,15 +24,18 @@ public class TrafficSourceRecordEntity {
     @Column(name = "project_id")
     private Long projectId;
 
-    @Column(name = "traffic_source_id")
-    private Long trafficSourceId;
+    @Column(name = "traffic_source_path")
+    private String trafficSourcePath;
 
-    @Column(name = "user_agent")
-    private String userAgent;
+    @Column(name = "use_scroll")
+    private boolean useScroll;
 
-    @Column(name = "ip")
-    private Long ip;
+    @Column(name = "stay_duration_time")
+    private Long stayDurationTime;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }

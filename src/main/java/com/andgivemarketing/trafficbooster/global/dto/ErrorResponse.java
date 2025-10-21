@@ -1,4 +1,4 @@
-package com.andgivemarketing.trafficbooster.dto;
+package com.andgivemarketing.trafficbooster.global.dto;
 
 
 import lombok.Data;
@@ -8,7 +8,6 @@ import java.time.format.DateTimeFormatter;
 
 @Data
 public class ErrorResponse {
-
 
     final static DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
     private ErrorDetails error;

@@ -1,4 +1,4 @@
-package com.andgivemarketing.trafficbooster.dto;
+package com.andgivemarketing.trafficbooster.context.trafficsource.dto;
 
 import lombok.Data;
 
@@ -17,6 +17,8 @@ public class TrafficSourceDTO {
 
     private Long stayDurationTime;
 
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
 }
