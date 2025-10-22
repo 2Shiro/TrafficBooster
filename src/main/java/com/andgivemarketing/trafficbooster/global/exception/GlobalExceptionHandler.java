@@ -7,8 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-// @RestControllerAdvice는 try catch 처럼 throw 던지면 코드가 끝나는 것이 아닌
-// 그 다음 코드를 실행시켜 주는 어노테이션
+// @RestControllerAdvice는 try catch 처럼 throw 에러를 던지면
+// 코드가 끝나는 것이 아닌 그 다음 코드를 실행시켜 주는 어노테이션
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     /**

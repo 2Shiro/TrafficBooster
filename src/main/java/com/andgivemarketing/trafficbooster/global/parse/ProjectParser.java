@@ -1,7 +1,7 @@
 package com.andgivemarketing.trafficbooster.global.parse;
 
-import com.andgivemarketing.trafficbooster.context.project.dto.ProjectDTO;
-import com.andgivemarketing.trafficbooster.context.project.entity.ProjectEntity;
+import com.andgivemarketing.trafficbooster.context.dto.ProjectDTO;
+import com.andgivemarketing.trafficbooster.context.entity.ProjectEntity;
 import org.springframework.stereotype.Component;
 
 @Component
