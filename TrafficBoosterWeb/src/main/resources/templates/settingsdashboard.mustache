@@ -1,0 +1,2617 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>앤기브마케팅 상세</title>
+
+    {{>layouts/meta}}
+
+    <style>
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        body.overflow-hidden {
+            overflow: hidden;
+        }
+
+        .grid-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 480px) {
+            .grid-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 헤더 영역 */
+        .dashboard-container .header-section {
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .dashboard-container .header-section .project-info {
+            flex: 1;
+        }
+
+        .dashboard-container .header-section .project-title-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .dashboard-container .header-section .project-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0;
+        }
+
+        .dashboard-container .header-section .project-period {
+            font-size: 15px;
+            color: #6b7280;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .dashboard-container .header-section .project-meta {
+            display: block;
+            align-items: center;
+        }
+
+        .dashboard-container .header-section .project-meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .dashboard-container .header-section .project-meta-label {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .dashboard-container .header-section .project-meta-value {
+            font-size: 16px;
+            color: #1f2937;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dashboard-container .header-section .header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .dashboard-container .header-section .project-action-button {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dashboard-container .header-section .project-action-button.start {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+        }
+
+        .dashboard-container .header-section .project-action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .dashboard-container .header-section .project-action-button.start:hover {
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .dashboard-container .header-section .project-settings-button {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(107, 114, 128, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dashboard-container .header-section .project-settings-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(107, 114, 128, 0.3);
+        }
+
+        /* 통계 카드 */
+        .dashboard-container .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-container .stats-section .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-container .stats-section .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-container .stats-section .stat-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-container .stats-section .text-group .txt {
+            font-size: 15px;
+            font-weight: 700;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .dashboard-container .stats-section .text-group .tit {
+            font-weight: 700;
+            font-size: 28px;
+            margin: 0;
+            color: #1f2937;
+        }
+
+        .dashboard-container .stats-section .stat-icon {
+            display: flex;
+            border-radius: 50%;
+            width: 55px;
+            height: 55px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dashboard-container .stats-section .stat-icon.green {
+            background-color: rgba(209, 250, 229, 1);
+        }
+
+        .dashboard-container .stats-section .stat-icon.green i {
+            color: #03c75a;
+            font-size: 22px;
+        }
+
+        .dashboard-container .stats-section .stat-icon.blue {
+            background-color: rgba(219, 234, 254, 1);
+        }
+
+        .dashboard-container .stats-section .stat-icon.blue i {
+            color: #3b82f6;
+            font-size: 22px;
+        }
+
+        .dashboard-container .stats-section .stat-icon.indigo {
+            background-color: rgba(224, 231, 255, 1);
+        }
+
+        .dashboard-container .stats-section .stat-icon.indigo i {
+            color: #4f46e5;
+            font-size: 22px;
+        }
+
+        /* 콘텐츠 영역 */
+        .dashboard-container .content-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        /* 오늘의 진척도 */
+        .dashboard-container .content-section .progress-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .dashboard-container .content-section .progress-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-container .content-section .progress-icon {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+
+        .dashboard-container .content-section .progress-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0;
+        }
+
+        .dashboard-container .content-section .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-container .content-section .progress-stat {
+            text-align: center;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            flex: 1;
+            margin: 0 5px;
+        }
+
+        .dashboard-container .content-section .progress-stat:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-container .content-section .progress-stat::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #020ee2, #5d66ff);
+        }
+
+        .dashboard-container .content-section .progress-stat:nth-child(2)::before {
+            background: linear-gradient(90deg, #10b981, #059669);
+        }
+
+        .dashboard-container .content-section .progress-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .dashboard-container .content-section .progress-stat-label {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .dashboard-container .content-section .progress-bar-container {
+            margin-bottom: 20px;
+        }
+
+        .dashboard-container .content-section .progress-bar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .dashboard-container .content-section .progress-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .dashboard-container .content-section .progress-percentage {
+            font-size: 14px;
+            font-weight: 700;
+            color: #020ee2;
+        }
+
+        .dashboard-container .content-section .progress-bar-track {
+            width: 100%;
+            height: 8px;
+            background: rgba(2, 14, 226, 0.08);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .dashboard-container .content-section .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #020ee2, #5d66ff);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* Additional Stats 개선된 디자인 */
+        .dashboard-container .content-section .additional-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-container .content-section .additional-stat {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-container .content-section .additional-stat:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-container .content-section .additional-stat::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #020ee2, #5d66ff);
+        }
+
+        .dashboard-container .content-section .additional-stat:nth-child(2)::before {
+            background: linear-gradient(90deg, #10b981, #059669);
+        }
+
+        .dashboard-container .content-section .additional-stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .dashboard-container .content-section .additional-stat-value i {
+            font-size: 16px;
+            color: #020ee2;
+        }
+
+        .dashboard-container .content-section .additional-stat:nth-child(2) .additional-stat-value i {
+            color: #10b981;
+        }
+
+        .dashboard-container .content-section .additional-stat-label {
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .dashboard-container .content-section .info-note {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border: 1px solid #bae6fd;
+            border-radius: 10px;
+            padding: 12px 16px;
+        }
+
+        .dashboard-container .content-section .info-note-text {
+            font-size: 14px;
+            color: #0369a1;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* 차트 카드 */
+        .dashboard-container .content-section .chart-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .dashboard-container .content-section .chart-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-container .content-section .chart-icon {
+            background: rgba(79, 70, 229, 0.1);
+            color: #4f46e5;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+
+        .dashboard-container .content-section .chart-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0;
+        }
+
+        .dashboard-container .content-section .chart-container {
+            position: relative;
+            height: 280px;
+        }
+
+        /* 트래픽 소스 목록 섹션 */
+        .dashboard-container .traffic-sources-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+        }
+
+        .dashboard-container .traffic-sources-section .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .dashboard-container .traffic-sources-section .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0;
+        }
+
+        .dashboard-container .traffic-sources-section .add-source-btn {
+            background: linear-gradient(135deg, #020ee2, #5d66ff);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dashboard-container .traffic-sources-section .add-source-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(2, 14, 226, 0.3);
+        }
+
+        .dashboard-container .traffic-sources-section .sources-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .dashboard-container .traffic-sources-section .source-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-container .traffic-sources-section .source-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-container .traffic-sources-section .source-card:hover .source-actions {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dashboard-container .traffic-sources-section .source-actions {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-container .traffic-sources-section .source-action-btn {
+            background: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-container .traffic-sources-section .source-action-btn.edit {
+            color: #020ee2;
+        }
+
+        .dashboard-container .traffic-sources-section .source-action-btn.delete {
+            color: #ef4444;
+        }
+
+        .dashboard-container .traffic-sources-section .source-action-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .dashboard-container .traffic-sources-section .source-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .dashboard-container .traffic-sources-section .source-path {
+            font-size: 14px;
+            font-weight: 500;
+            color: #6b7280;
+            margin-bottom: 12px;
+            word-break: break-all;
+        }
+
+        .dashboard-container .traffic-sources-section .source-meta {
+            display: flex;
+            gap: 8px;
+            font-size: 12px;
+            flex-wrap: wrap;
+        }
+
+        .dashboard-container .traffic-sources-section .source-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .dashboard-container .traffic-sources-section .source-badge.scroll-yes {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+        }
+
+        .dashboard-container .traffic-sources-section .source-badge.scroll-no {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+
+        .dashboard-container .traffic-sources-section .source-badge.duration {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+
+        /* 트래픽 히스토리 섹션 */
+        .dashboard-container .traffic-history-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+        }
+
+        .dashboard-container .traffic-history-section .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .dashboard-container .traffic-history-section .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0;
+        }
+
+        .dashboard-container .traffic-history-section .search-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .dashboard-container .traffic-history-section .search-input {
+            padding: 8px 40px 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #374151;
+            background: white;
+            min-width: 200px;
+            transition: all 0.25s ease;
+        }
+
+        .dashboard-container .traffic-history-section .search-input:focus {
+            outline: none;
+            border-color: #020ee2;
+            box-shadow: 0 0 0 3px rgba(2, 14, 226, 0.1);
+        }
+
+        .dashboard-container .traffic-history-section .search-button {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-container .traffic-history-section .search-button:hover {
+            color: #020ee2;
+            background: rgba(2, 14, 226, 0.1);
+        }
+
+        .dashboard-container .traffic-history-section .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+            min-height: 400px;
+        }
+
+        .dashboard-container .traffic-history-section .history-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px 25px;
+            transition: all 0.3s ease;
+            display: grid;
+            grid-template-columns: 150px 1fr 200px;
+            gap: 20px;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .dashboard-container .traffic-history-section .history-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-color: #d1d5db;
+        }
+
+        .dashboard-container .traffic-history-section .history-card.skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border: 1px solid #e5e7eb;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .dashboard-container .traffic-history-section .skeleton-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .dashboard-container .traffic-history-section .skeleton-line {
+            height: 16px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        .dashboard-container .traffic-history-section .skeleton-line.ip {
+            height: 20px;
+            width: 30%;
+        }
+
+        .dashboard-container .traffic-history-section .skeleton-line.meta {
+            height: 14px;
+            width: 60%;
+        }
+
+        .dashboard-container .traffic-history-section .history-ip {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .dashboard-container .traffic-history-section .history-main {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .dashboard-container .traffic-history-section .history-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .dashboard-container .traffic-history-section .history-meta-item i {
+            color: #9ca3af;
+            width: 16px;
+        }
+
+        .dashboard-container .traffic-history-section .history-source {
+            text-align: right;
+        }
+
+        .dashboard-container .traffic-history-section .history-source-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 5px;
+        }
+
+        .dashboard-container .traffic-history-section .history-badges {
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .dashboard-container .traffic-history-section .scroll-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .dashboard-container .traffic-history-section .scroll-badge.yes {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+        }
+
+        .dashboard-container .traffic-history-section .scroll-badge.no {
+            background: rgba(107, 114, 128, 0.1);
+            color: #4b5563;
+        }
+
+        .dashboard-container .traffic-history-section .device-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .dashboard-container .traffic-history-section .device-badge.pc {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+
+        .dashboard-container .traffic-history-section .device-badge.mobile {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+
+        .dashboard-container .traffic-history-section .device-tooltip {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            white-space: nowrap;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            max-width: 350px;
+            white-space: normal;
+            word-break: break-all;
+        }
+
+        .dashboard-container .traffic-history-section .device-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            right: 10px;
+            border: 5px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .dashboard-container .traffic-history-section .device-badge:hover .device-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dashboard-container .traffic-history-section .history-pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            align-items: center;
+        }
+
+        /* 페이지 버튼 공통 스타일 */
+        .page-button {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: #374151;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 36px;
+            text-align: center;
+        }
+
+        .page-button:hover {
+            background: #f8faff;
+            border-color: #020ee2;
+            color: #020ee2;
+        }
+
+        .page-button.active {
+            background: #020ee2;
+            border-color: #020ee2;
+            color: white;
+        }
+
+        .page-button:disabled {
+            background: #f9fafb;
+            border-color: #e2e8f0;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .page-button:disabled:hover {
+            background: #f9fafb;
+            border-color: #e2e8f0;
+            color: #9ca3af;
+        }
+
+        /* 모달 공통 스타일 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1200;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal .modal-content {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-20px) scale(0.95);
+            transition: all 0.3s ease;
+            max-height: 90vh;
+            overflow: hidden;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal .modal-header {
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e5e7eb;
+            background: linear-gradient(135deg, #020ee2, #5d66ff);
+            color: white;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .modal .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .modal .modal-close {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            font-size: 20px;
+            color: white;
+            cursor: pointer;
+            padding: 8px;
+            line-height: 1;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .modal .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal .modal-body {
+            padding: 30px;
+            max-height: calc(90vh - 180px);
+            overflow-y: auto;
+        }
+
+        .modal .modal-footer {
+            padding: 25px 30px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            border-top: 1px solid #e5e7eb;
+            background: #f8fafc;
+            border-radius: 0 0 16px 16px;
+        }
+
+        .modal .modal-button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .modal .modal-button-cancel {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .modal .modal-button-cancel:hover {
+            background: #e5e7eb;
+        }
+
+        .modal .modal-button-primary {
+            background: linear-gradient(135deg, #020ee2, #5d66ff);
+            color: white;
+            box-shadow: 0 2px 8px rgba(2, 14, 226, 0.2);
+        }
+
+        .modal .modal-button-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(2, 14, 226, 0.3);
+        }
+
+        .modal .modal-button-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+        }
+
+        .modal .modal-button-danger:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .modal .form-group {
+            margin-bottom: 20px;
+        }
+
+        .modal .form-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .modal .form-input, .modal .form-textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #374151;
+            transition: all 0.25s ease;
+        }
+
+        .modal .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .modal .form-input:focus, .modal .form-textarea:focus {
+            outline: none;
+            border-color: #020ee2;
+            box-shadow: 0 0 0 3px rgba(2, 14, 226, 0.1);
+        }
+
+        /* Custom Dropdown */
+        .custom-dropdown {
+            position: relative;
+        }
+
+        .dropdown-button {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #374151;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.25s ease;
+        }
+
+        .dropdown-button:hover {
+            border-color: #020ee2;
+        }
+
+        .dropdown-button.active {
+            border-color: #020ee2;
+            box-shadow: 0 0 0 3px rgba(2, 14, 226, 0.1);
+        }
+
+        .dropdown-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-button.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #374151;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background: #f8faff;
+            color: #020ee2;
+        }
+
+        .dropdown-item:first-child {
+            border-radius: 8px 8px 0 0;
+        }
+
+        .dropdown-item:last-child {
+            border-radius: 0 0 8px 8px;
+        }
+
+        /* 프로젝트 설정 모달 스타일 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-overlay .modal {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+            width: 90%;
+            max-width: 650px;
+            position: relative;
+        }
+
+        .modal-overlay.show .modal {
+            transform: translateY(0);
+        }
+
+        .modal-overlay .modal-header {
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .modal-overlay .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0;
+        }
+
+        .modal-overlay .modal-close {
+            background: transparent;
+            border: none;
+            font-size: 24px;
+            color: #9ca3af;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .modal-overlay .modal-close:hover {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .modal-overlay .modal-content {
+            padding: 30px;
+        }
+
+        .modal-overlay .modal-footer {
+            padding: 25px 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .settings-modal .form-group {
+            margin-bottom: 25px;
+        }
+
+        .settings-modal .form-group-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .settings-modal .form-group-col {
+            flex: 1;
+        }
+
+        .settings-modal .form-label {
+            display: block;
+            font-size: 15px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .settings-modal .form-label .required {
+            color: #ef4444;
+        }
+
+        .settings-modal .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #374151;
+            transition: all 0.25s ease;
+            background: white;
+        }
+
+        .settings-modal .form-input:focus {
+            outline: none;
+            border-color: #020ee2;
+            box-shadow: 0 0 0 3px rgba(2, 14, 226, 0.1);
+        }
+
+        .settings-modal .custom-dropdown {
+            position: relative;
+            width: 100%;
+            user-select: none;
+        }
+
+        .settings-modal .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 15px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #374151;
+            transition: all 0.25s ease;
+            min-height: 42px;
+        }
+
+        .settings-modal .dropdown-toggle:hover {
+            border-color: #020ee2;
+            background-color: #f8faff;
+        }
+
+        .settings-modal .dropdown-toggle i {
+            transition: transform 0.3s ease;
+            color: #9ca3af;
+        }
+
+        .settings-modal .dropdown-toggle.active i {
+            transform: rotate(180deg);
+        }
+
+        .settings-modal .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 0;
+            width: 100%;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            max-height: 0;
+            overflow: hidden auto;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .settings-modal .dropdown-menu.show {
+            max-height: 200px;
+            opacity: 1;
+            padding: 8px 0;
+        }
+
+        .settings-modal .dropdown-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            color: #374151;
+        }
+
+        .settings-modal .dropdown-item:hover {
+            background: #f8faff;
+            color: #020ee2;
+        }
+
+        .settings-modal .dropdown-item.selected {
+            background: rgba(2, 14, 226, 0.1);
+            color: #020ee2;
+            font-weight: 600;
+        }
+
+        .settings-modal .date-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .settings-modal .date-dropdown {
+            flex: 1;
+            position: relative;
+        }
+
+        .settings-modal .settings-cancel-button {
+            background: #f3f4f6;
+            color: #4b5563;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .settings-modal .settings-cancel-button:hover {
+            background: #e5e7eb;
+        }
+
+        .settings-modal .settings-submit-button {
+            background: #020ee2;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .settings-modal .settings-submit-button:hover {
+            background: #010cc0;
+        }
+
+        /* 반응형 */
+        @media (max-width: 1024px) {
+            .dashboard-container .traffic-sources-section .sources-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 15px;
+            }
+
+            .dashboard-container .header-section {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .dashboard-container .stats-section {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-container .content-section {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-container .traffic-sources-section .sources-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-container .traffic-history-section .history-card {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .dashboard-container .traffic-history-section .history-source {
+                text-align: left;
+            }
+
+            .dashboard-container .traffic-history-section .history-badges {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+{{>layouts/loader}}
+{{>layouts/header}}
+
+<div class="main-content">
+    <div class="dashboard-container">
+        <!-- 헤더 영역 -->
+        <div id="main-group" class="grid-row">
+            <div class="header-section">
+                <div class="project-info">
+                    <div class="project-title-section">
+                        <h1 class="project-title">온앤온 피트니스 연신내점 헬스&PT</h1>
+                    </div>
+                    <div class="project-period" id="projectPeriod">2025.07.12 ~</div>
+                </div>
+                <div class="header-buttons">
+                    <button class="project-action-button" id="projectActionBtn" onclick="stopProjects()">
+                        <i class="fas fa-pause"></i>
+                        중지
+                    </button>
+                    <button class="project-settings-button" onclick="openSettingsModal()">
+                        <i class="fas fa-cog"></i>
+                        설정
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 통계 카드 -->
+        <div class="stats-section">
+            <div class="stat-card">
+                <div class="stat-inner">
+                    <div class="text-group">
+                        <p class="txt">총 목표 유입량</p>
+                        <h2 class="tit" id="targetCount">{{totalTargetTrafficCount}}개</h2>
+                    </div>
+                    <div class="stat-icon green">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-inner">
+                    <div class="text-group">
+                        <p class="txt">일 목표 유입량</p>
+                        <h2 class="tit" id="dailyTarget2" style="color: #3b82f6;">{{dailyTargetTrafficCount}}개</h2>
+                    </div>
+                    <div class="stat-icon blue">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-inner">
+                    <div class="text-group">
+                        <p class="txt">남은 유입량 합계</p>
+                        <h2 class="tit" id="remainingCount" style="color: #4f46e5;">{{remainingTotalTargetTrafficCount}}개</h2>
+                    </div>
+                    <div class="stat-icon indigo">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 콘텐츠 영역 -->
+        <div class="content-section">
+            <!-- 오늘의 진척도 -->
+            <div class="progress-card">
+                <div class="progress-header">
+                    <div class="progress-icon">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <h3 class="progress-title">오늘의 진척도</h3>
+                </div>
+
+                <div class="progress-stats">
+                    <div class="progress-stat">
+                        <div class="progress-stat-value" id="dailyTarget" style="color: #3b82f6;">{{dailyTargetTrafficCount}}</div>
+                        <div class="progress-stat-label">일 목표량</div>
+                    </div>
+                    <div class="progress-stat">
+                        <div class="progress-stat-value" id="dailyUploaded" style="color: #10b981;">{{todayTrafficSourceRecordCount}}</div>
+                        <div class="progress-stat-label">오늘 유입</div>
+                    </div>
+                </div>
+
+                <div class="progress-bar-container">
+                    <div class="progress-bar-header">
+                        <span class="progress-label">일일 진척도</span>
+                        <span class="progress-percentage" id="dailyProgress">90%</span>
+                    </div>
+                    <div class="progress-bar-track">
+                        <div class="progress-bar-fill" id="dailyProgressFill" style="width: 90%;"></div>
+                    </div>
+                </div>
+
+                <div class="additional-stats">
+                    <div class="additional-stat">
+                        <div class="additional-stat-value">
+                            <i class="fas fa-clock"></i>
+                            10시
+                        </div>
+                        <div class="additional-stat-label">유입 피크 타임</div>
+                    </div>
+                    <div class="additional-stat">
+                        <div class="additional-stat-value">
+                            <i class="fas fa-hourglass-half"></i>
+                            17.47분
+                        </div>
+                        <div class="additional-stat-label">평균 유입 간격</div>
+                    </div>
+                </div>
+
+                <div class="info-note">
+                    <p class="info-note-text" id="dailyMessage">
+                        <i class="fas fa-info-circle"></i> 오늘 목표까지 {{remainingTodayTargetTrafficCount}}개가 남았습니다!
+                    </p>
+                </div>
+            </div>
+
+            <!-- 일별 발행량 차트 -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3 class="chart-title">일별 유입량</h3>
+                </div>
+                <div class="chart-container">
+                    <div id="dailyChart"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 트래픽 소스 목록 -->
+        <div class="traffic-sources-section">
+            <div class="section-header">
+                <h3 class="section-title">트래픽 소스 목록</h3>
+                <button class="add-source-btn" onclick="openAddSourceModal()">
+                    <i class="fas fa-plus"></i>
+                    추가
+                </button>
+            </div>
+            <div class="sources-grid" id="sourcesGrid">
+                <!-- 샘플 데이터 -->
+                <div class="source-card" data-source-id="1">
+                    <div class="source-actions">
+                        <button class="source-action-btn edit" onclick="editSource(1)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="source-action-btn delete" onclick="deleteSource(1)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="source-name">메인 페이지</div>
+                    <div class="source-path">https://example.com/page1</div>
+                    <div class="source-meta">
+                        <span class="source-badge scroll-yes">
+                            <i class="fas fa-check-circle"></i> 스크롤 포함
+                        </span>
+                        <span class="source-badge duration">
+                            <i class="fas fa-clock"></i> 30초
+                        </span>
+                    </div>
+                </div>
+
+                <div class="source-card" data-source-id="2">
+                    <div class="source-actions">
+                        <button class="source-action-btn edit" onclick="editSource(2)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="source-action-btn delete" onclick="deleteSource(2)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="source-name">서브 페이지</div>
+                    <div class="source-path">https://example.com/page2</div>
+                    <div class="source-meta">
+                        <span class="source-badge scroll-no">
+                            <i class="fas fa-times-circle"></i> 스크롤 제외
+                        </span>
+                        <span class="source-badge duration">
+                            <i class="fas fa-clock"></i> 45초
+                        </span>
+                    </div>
+                </div>
+
+                <div class="source-card" data-source-id="3">
+                    <div class="source-actions">
+                        <button class="source-action-btn edit" onclick="editSource(3)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="source-action-btn delete" onclick="deleteSource(3)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="source-name">상세 페이지</div>
+                    <div class="source-path">https://example.com/page3</div>
+                    <div class="source-meta">
+                        <span class="source-badge scroll-yes">
+                            <i class="fas fa-check-circle"></i> 스크롤 포함
+                        </span>
+                        <span class="source-badge duration">
+                            <i class="fas fa-clock"></i> 60초
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 트래픽 히스토리 -->
+        <div class="traffic-history-section">
+            <div class="section-header">
+                <h3 class="section-title">트래픽 히스토리</h3>
+                <div class="search-container">
+                    <input type="text" class="search-input" id="historySearchInput" placeholder="IP 검색...">
+                    <button class="search-button" onclick="performHistorySearch()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="history-list" id="historyList">
+                <!-- 스켈레톤 로딩 -->
+            </div>
+
+            <div class="history-pagination" id="historyPagination">
+                <button class="page-button" disabled>
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="page-button active">1</button>
+                <button class="page-button">2</button>
+                <button class="page-button">3</button>
+                <button class="page-button">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 트래픽 소스 추가/편집 모달 -->
+        <div class="modal" id="sourceModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="sourceModalTitle">트래픽 소스 추가</h3>
+                    <button class="modal-close" onclick="closeSourceModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">소스 이름 (별칭)</label>
+                        <input type="text" class="form-input" id="sourceNameInput" placeholder="소스 이름을 입력해주세요">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">트래픽 경로</label>
+                        <textarea class="form-textarea" id="sourcePathInput" placeholder="트래픽 경로를 입력해주세요"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">스크롤 여부</label>
+                        <div class="custom-dropdown">
+                            <div class="dropdown-button" data-value="EXECUTE">
+                                <span>스크롤 포함</span>
+                                <i class="fas fa-chevron-down dropdown-arrow"></i>
+                            </div>
+                            <div class="dropdown-menu">
+                                <div class="dropdown-item" data-value="EXECUTE">스크롤 포함</div>
+                                <div class="dropdown-item" data-value="FORBIDDEN">스크롤 제외</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">체류 시간 (초)</label>
+                        <input type="number" class="form-input" id="sourceDurationInput" value="30" min="1" placeholder="체류 시간을 초 단위로 입력">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-button modal-button-cancel" onclick="closeSourceModal()">닫기</button>
+                    <button class="modal-button modal-button-primary" id="saveSourceBtn">저장하기</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 프로젝트 설정 모달 -->
+        <div class="modal-overlay settings-modal" id="settingsModalOverlay">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3 class="modal-title">프로젝트 설정 편집</h3>
+                    <button class="modal-close" id="settingsModalClose">×</button>
+                </div>
+                <div class="modal-content">
+                    <form id="settingsForm">
+                        <!-- 프로젝트명 -->
+                        <div class="form-group">
+                            <label class="form-label">프로젝트 명 <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="settingsProjectName" name="projectName" placeholder="프로젝트 이름을 입력해주세요." required>
+                        </div>
+
+                        <!-- 대상 주소 -->
+                        <div class="form-group">
+                            <label class="form-label">대상 주소 <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="settingsTargetAddress" name="targetAddress" placeholder="https://example.com" required>
+                        </div>
+
+                        <!-- 프로젝트 시작일 -->
+                        <div class="form-group">
+                            <label class="form-label">프로젝트 시작일 <span class="required">*</span></label>
+                            <div class="date-selector">
+                                <div class="date-dropdown">
+                                    <div class="custom-dropdown">
+                                        <div class="dropdown-toggle">
+                                            <span class="selected-option" data-value="2025">2025년</span>
+                                            <i class="fas fa-chevron-down"></i>
+                                        </div>
+                                        <div class="dropdown-menu" id="settingsYearDropdownMenu">
+                                            <div class="dropdown-item selected" data-value="2025">2025년</div>
+                                            <div class="dropdown-item" data-value="2026">2026년</div>
+                                            <div class="dropdown-item" data-value="2027">2027년</div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="settingsProjectYear" name="projectYear" required value="2025">
+                                </div>
+                                <div class="date-dropdown">
+                                    <div class="custom-dropdown">
+                                        <div class="dropdown-toggle">
+                                            <span class="selected-option" data-value="7">7월</span>
+                                            <i class="fas fa-chevron-down"></i>
+                                        </div>
+                                        <div class="dropdown-menu" id="settingsMonthDropdownMenu">
+                                            <div class="dropdown-item" data-value="1">1월</div>
+                                            <div class="dropdown-item" data-value="2">2월</div>
+                                            <div class="dropdown-item" data-value="3">3월</div>
+                                            <div class="dropdown-item" data-value="4">4월</div>
+                                            <div class="dropdown-item" data-value="5">5월</div>
+                                            <div class="dropdown-item" data-value="6">6월</div>
+                                            <div class="dropdown-item selected" data-value="7">7월</div>
+                                            <div class="dropdown-item" data-value="8">8월</div>
+                                            <div class="dropdown-item" data-value="9">9월</div>
+                                            <div class="dropdown-item" data-value="10">10월</div>
+                                            <div class="dropdown-item" data-value="11">11월</div>
+                                            <div class="dropdown-item" data-value="12">12월</div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="settingsProjectMonth" name="projectMonth" required value="7">
+                                </div>
+                                <div class="date-dropdown">
+                                    <div class="custom-dropdown">
+                                        <div class="dropdown-toggle">
+                                            <span class="selected-option" data-value="12">12일</span>
+                                            <i class="fas fa-chevron-down"></i>
+                                        </div>
+                                        <div class="dropdown-menu" id="settingsDayDropdownMenu">
+                                            <div class="dropdown-item" data-value="1">1일</div>
+                                            <div class="dropdown-item" data-value="2">2일</div>
+                                            <div class="dropdown-item" data-value="3">3일</div>
+                                            <div class="dropdown-item" data-value="4">4일</div>
+                                            <div class="dropdown-item" data-value="5">5일</div>
+                                            <div class="dropdown-item" data-value="6">6일</div>
+                                            <div class="dropdown-item" data-value="7">7일</div>
+                                            <div class="dropdown-item" data-value="8">8일</div>
+                                            <div class="dropdown-item" data-value="9">9일</div>
+                                            <div class="dropdown-item" data-value="10">10일</div>
+                                            <div class="dropdown-item" data-value="11">11일</div>
+                                            <div class="dropdown-item selected" data-value="12">12일</div>
+                                            <div class="dropdown-item" data-value="13">13일</div>
+                                            <div class="dropdown-item" data-value="14">14일</div>
+                                            <div class="dropdown-item" data-value="15">15일</div>
+                                            <div class="dropdown-item" data-value="16">16일</div>
+                                            <div class="dropdown-item" data-value="17">17일</div>
+                                            <div class="dropdown-item" data-value="18">18일</div>
+                                            <div class="dropdown-item" data-value="19">19일</div>
+                                            <div class="dropdown-item" data-value="20">20일</div>
+                                            <div class="dropdown-item" data-value="21">21일</div>
+                                            <div class="dropdown-item" data-value="22">22일</div>
+                                            <div class="dropdown-item" data-value="23">23일</div>
+                                            <div class="dropdown-item" data-value="24">24일</div>
+                                            <div class="dropdown-item" data-value="25">25일</div>
+                                            <div class="dropdown-item" data-value="26">26일</div>
+                                            <div class="dropdown-item" data-value="27">27일</div>
+                                            <div class="dropdown-item" data-value="28">28일</div>
+                                            <div class="dropdown-item" data-value="29">29일</div>
+                                            <div class="dropdown-item" data-value="30">30일</div>
+                                            <div class="dropdown-item" data-value="31">31일</div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="settingsProjectDay" name="projectDay" required value="12">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 트래픽 타입 + 유입량 -->
+                        <div class="form-group-row">
+                            <!-- 트래픽 타입 -->
+                            <div class="form-group-col">
+                                <label class="form-label">트래픽 타입 <span class="required">*</span></label>
+                                <div class="custom-dropdown" id="settingsTrafficTypeDropdown">
+                                    <div class="dropdown-toggle">
+                                        <span class="selected-option">선택</span>
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                    <div class="dropdown-menu" id="settingsTrafficTypeDropdownMenu">
+                                        <div class="dropdown-item" data-value="DEDICATED_PROXY">고정 IP</div>
+                                        <div class="dropdown-item" data-value="DATACENTER_PROXY">유동 IP</div>
+                                        <div class="dropdown-item" data-value="TETHERING">테더링</div>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="settingsTrafficType" name="trafficType" required value="">
+                            </div>
+
+                            <!-- 일 유입량 -->
+                            <div class="form-group-col">
+                                <label class="form-label">일 유입량 <span class="required">*</span></label>
+                                <input type="number" class="form-input" id="settingsDailyAmount" name="dailyAmount" placeholder="숫자를 입력해주세요" min="1" required>
+                            </div>
+
+                            <!-- 총 유입량 -->
+                            <div class="form-group-col">
+                                <label class="form-label">총 유입량 <span class="required">*</span></label>
+                                <input type="number" class="form-input" id="settingsTotalAmount" name="totalAmount" placeholder="숫자를 입력해주세요" min="1" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="settings-cancel-button" id="cancelSettingsBtn">취소</button>
+                    <button type="button" class="settings-submit-button" id="submitSettingsBtn">편집하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{>layouts/script}}
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+
+    $('#headerTitle').text('온앤온 피트니스 연신내점 헬스&PT');
+
+    // ===============================
+    // 프로젝트 대시보드 스크립트 (트래픽 버전)
+    // ===============================
+
+    // ---------------------------------
+    // 프로젝트/전역 상태
+    // ---------------------------------
+    const dailyTargetTrafficCount = {{dailyTargetTrafficCount}};
+    const totalTargetTrafficCount = {{totalTargetTrafficCount}};
+    const remainingTotalTargetTrafficCount = {{remainingTotalTargetTrafficCount}};
+    const todayTrafficSourceRecordCount = {{todayTrafficSourceRecordCount}};
+    const remainingTodayTargetTrafficCount = {{remainingTodayTargetTrafficCount}};
+
+    let projectStatus = 'ONGOING';
+    const currentProjectId = '273';
+
+    // 트래픽 페이징 전역
+    let historyPage = 0;
+    let historyPageSize = 10;
+    let currentSearchQuery = '';
+    let historyLoading = false;
+
+    // 트래픽 소스 편집 상태
+    let currentEditingSourceId = null;
+
+    // 날짜 변수
+    const startDate = '2025-07-12';
+    const endDate = null; // 또는 '2025-10-12'
+
+    if (projectStatus === 'ONGOING') {
+        $('.header-buttons').html(`<button class="project-action-button" id="projectActionBtn" onclick="stopProjects()">
+                                <i class="fas fa-pause"></i>
+                                중지
+                    </button>
+                    <button class="project-settings-button" onclick="openSettingsModal()">
+                        <i class="fas fa-cog"></i>
+                        설정
+                    </button>`);
+    } else {
+        $('.header-buttons').html(`<button class="project-action-button start" id="projectActionBtn" onclick="startProjects()">
+                                <i class="fas fa-play"></i>
+                                시작
+                    </button>
+                    <button class="project-settings-button" onclick="openSettingsModal()">
+                        <i class="fas fa-cog"></i>
+                        설정
+                    </button>`);
+    }
+
+    // ---------------------------------
+    // 초기화
+    // ---------------------------------
+    $(document).ready(function () {
+        initializeChart();
+        initializeEventHandlers();
+        updateStatistics();
+        updateProjectPeriod();
+        loadHistory(0);
+        unLoadPreloader(1000);
+    });
+
+    // ---------------------------------
+    // 프로젝트 기간 표시
+    // ---------------------------------
+    function updateProjectPeriod() {
+        let periodText = startDate.replace(/-/g, '.') + ' ~';
+        if (endDate) {
+            periodText = startDate.replace(/-/g, '.') + ' ~ ' + endDate.replace(/-/g, '.');
+        }
+        $('#projectPeriod').text(periodText);
+    }
+
+    // ---------------------------------
+    // 프로젝트 시작/중지 토글
+    // ---------------------------------
+    function startProjects() {
+        showCustomAlert('프로젝트를 시작하시겠어요?', `프로젝트 시작일에 맞춰 포스팅이 시작됩니다`, [
+            {
+                text: '시작하기',
+                class: 'alert-modal-button alert-modal-button-primary',
+                action: function () {
+                    loadPreloader(0);
+                    $.ajax({
+                        url: `/api/project/start?id=${currentProjectId}`,
+                        method: 'PUT',
+                        contentType: 'application/json',
+                        success: function () {
+                            showCustomAlert('프로젝트 시작 완료!', '이제 프로젝트 시작일에 맞춰 포스팅이 시작됩니다.', [{
+                                text: '닫기',
+                                class: 'alert-modal-button alert-modal-button-secondary',
+                                action: function () {
+                                    window.location.reload();
+                                }
+                            }]);
+                        },
+                        error: function (xhr) {
+                            let msg = '프로젝트를 시작할 수 없습니다.';
+                            try {
+                                if (xhr.responseJSON?.error?.message) {
+                                    msg = xhr.responseJSON.error.message;
+                                }
+                            } catch (e) {
+                            }
+                            showCustomAlert('프로젝트 시작 불가', msg);
+                        },
+                        complete: function () {
+                            unLoadPreloader(1000);
+                        }
+                    });
+                }
+            },
+            {
+                text: '닫기',
+                class: 'alert-modal-button alert-modal-button-secondary',
+                action: function () {
+                    hideCustomAlert();
+                }
+            }
+        ]);
+    }
+
+    function stopProjects() {
+        showCustomAlert('프로젝트를 중지하시겠어요?', `진행중인 모든 포스팅이 즉시 중단됩니다`, [
+            {
+                text: '중지하기',
+                class: 'alert-modal-button alert-modal-button-primary',
+                action: function () {
+                    loadPreloader(0);
+                    $.ajax({
+                        url: `/api/project/${currentProjectId}/stop`,
+                        method: 'POST',
+                        contentType: 'application/json',
+                        success: function () {
+                            showCustomAlert('프로젝트 중지 완료!', '진행중인 모든 포스팅이 중단 됐습니다.', [{
+                                text: '닫기',
+                                class: 'alert-modal-button alert-modal-button-secondary',
+                                action: function () {
+                                    window.location.reload();
+                                }
+                            }]);
+                        },
+                        error: function (xhr) {
+                            let msg = '프로젝트를 중지할 수 없습니다.';
+                            try {
+                                if (xhr.responseJSON?.error?.message) {
+                                    msg = xhr.responseJSON.error.message;
+                                }
+                            } catch (e) {
+                            }
+                            showCustomAlert('프로젝트 중지 불가', msg);
+                        },
+                        complete: function () {
+                            unLoadPreloader(1000);
+                        }
+                    });
+                }
+            },
+            {
+                text: '닫기',
+                class: 'alert-modal-button alert-modal-button-secondary',
+                action: function () {
+                    hideCustomAlert();
+                }
+            }
+        ]);
+    }
+
+    // ---------------------------------
+    // 통계/차트
+    // ---------------------------------
+    function updateStatistics() {
+        $('#targetCount').text(totalTargetTrafficCount.toLocaleString() + '개');
+        $('#dailyTarget2').text(dailyTargetTrafficCount.toLocaleString() + '개');
+        $('#remainingCount').text(remainingTotalTargetTrafficCount.toLocaleString() + '개');
+
+        $('#dailyTarget').text(dailyTargetTrafficCount.toLocaleString());
+        $('#dailyUploaded').text(todayTrafficSourceRecordCount.toLocaleString());
+
+        const p = Math.min((todayTrafficSourceRecordCount / dailyTargetTrafficCount) * 100, 100);
+        $('#dailyProgress').text(Math.round(p) + '%');
+        $('#dailyProgressFill').css('width', p + '%');
+
+        if (todayTrafficSourceRecordCount >= dailyTargetTrafficCount) {
+            $('#dailyMessage').html('<i class="fas fa-check-circle"></i> 오늘 목표치인 ' + dailyTargetTrafficCount.toLocaleString() + '개를 모두 달성했어요!');
+        } else {
+            $('#dailyMessage').html('<i class="fas fa-info-circle"></i> 오늘 목표까지 ' + remainingTodayTargetTrafficCount.toLocaleString() + '개가 남았습니다!');
+        }
+    }
+
+    function initializeChart() {
+        const options = {
+            series: [{
+                name: '일별 유입량',
+                data: [12, 18, 15, 20, 16, 14, 10]
+            }],
+            chart: {
+                type: 'bar',
+                height: 280,
+                toolbar: {
+                    show: false
+                }
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 6,
+                    columnWidth: '60%',
+                    distributed: true
+                }
+            },
+            colors: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#10b981', '#8b5cf6', '#9ca3af'],
+            dataLabels: {
+                enabled: false
+            },
+            legend: {
+                show: false
+            },
+            xaxis: {
+                categories: ['월', '화', '수', '목', '금', '토', '일'],
+                axisBorder: {
+                    show: false
+                },
+                axisTicks: {
+                    show: false
+                }
+            },
+            yaxis: {
+                show: true,
+                labels: {
+                    style: {
+                        colors: '#6b7280'
+                    }
+                }
+            },
+            grid: {
+                borderColor: '#e5e7eb',
+                strokeDashArray: 5
+            },
+            tooltip: {
+                y: {
+                    formatter: function (val) {
+                        return val + "개"
+                    }
+                }
+            }
+        };
+
+        const chart = new ApexCharts(document.querySelector("#dailyChart"), options);
+        chart.render();
+    }
+
+    // ---------------------------------
+    // 이벤트 핸들러
+    // ---------------------------------
+    function initializeEventHandlers() {
+        initializeDropdowns();
+        initializeSettingsModal();
+
+        $(document).on('click', '#historyPagination .page-button', function () {
+            const page = $(this).data('page');
+            if (page === undefined || page === null) return;
+            if (historyLoading) return;
+            loadHistory(page);
+        });
+
+        $('#historySearchInput').on('keypress', function (e) {
+            if (e.which === 13) {
+                performHistorySearch();
+            }
+        });
+    }
+
+    // ---------------------------------
+    // 드롭다운 초기화
+    // ---------------------------------
+    function initializeDropdowns() {
+        $(document).on('click', '.dropdown-button', function (e) {
+            e.stopPropagation();
+            const $this = $(this);
+            const $menu = $this.siblings('.dropdown-menu');
+
+            $('.dropdown-button').not($this).removeClass('active').siblings('.dropdown-menu').removeClass('show');
+
+            $this.toggleClass('active');
+            $menu.toggleClass('show');
+        });
+
+        $(document).on('click', '.dropdown-item', function (e) {
+            e.stopPropagation();
+            const $this = $(this);
+            const value = $this.data('value');
+            const text = $this.text();
+
+            const $button = $this.closest('.dropdown-menu').siblings('.dropdown-button');
+            $button.find('span').text(text);
+            $button.attr('data-value', value);
+
+            $button.removeClass('active');
+            $this.closest('.dropdown-menu').removeClass('show');
+        });
+
+        // Settings Modal Dropdowns
+        $(document).on('click', '.settings-modal .dropdown-toggle', function (e) {
+            e.stopPropagation();
+            const $this = $(this);
+            const $menu = $this.siblings('.dropdown-menu');
+
+            $('.settings-modal .dropdown-toggle').not($this).removeClass('active').siblings('.dropdown-menu').removeClass('show');
+
+            $this.toggleClass('active');
+            $menu.toggleClass('show');
+        });
+
+        $(document).on('click', '.settings-modal .dropdown-item', function (e) {
+            e.stopPropagation();
+            const $this = $(this);
+            const value = $this.data('value');
+            const text = $this.text();
+
+            const $dropdown = $this.closest('.custom-dropdown');
+            const $toggle = $dropdown.find('.dropdown-toggle');
+            const $hiddenInput = $dropdown.siblings('input[type="hidden"]');
+
+            $toggle.find('.selected-option').text(text).attr('data-value', value);
+            $hiddenInput.val(value);
+
+            $toggle.removeClass('active');
+            $this.closest('.dropdown-menu').removeClass('show');
+
+            // 선택된 항목 표시
+            $this.siblings('.dropdown-item').removeClass('selected');
+            $this.addClass('selected');
+        });
+
+        $(document).click(function () {
+            $('.dropdown-button, .dropdown-toggle').removeClass('active');
+            $('.dropdown-menu').removeClass('show');
+        });
+    }
+
+    // ---------------------------------
+    // Settings Modal 초기화
+    // ---------------------------------
+    function initializeSettingsModal() {
+        $('#settingsModalClose, #cancelSettingsBtn').on('click', function() {
+            closeSettingsModal();
+        });
+
+        $('#submitSettingsBtn').on('click', function() {
+            submitSettings();
+        });
+    }
+
+    function openSettingsModal() {
+        // 현재 값으로 폼 채우기
+        $('#settingsProjectName').val($('.project-title').text());
+        $('#settingsTargetAddress').val('https://example.com'); // 실제로는 API에서 가져와야 함
+
+        $('#settingsModalOverlay').addClass('show');
+        $('body').addClass('overflow-hidden');
+    }
+
+    function closeSettingsModal() {
+        $('#settingsModalOverlay').removeClass('show');
+        $('body').removeClass('overflow-hidden');
+    }
+
+    function submitSettings() {
+        const formData = {
+            projectName: $('#settingsProjectName').val(),
+            targetAddress: $('#settingsTargetAddress').val(),
+            startDate: `${$('#settingsProjectYear').val()}-${$('#settingsProjectMonth').val().padStart(2, '0')}-${$('#settingsProjectDay').val().padStart(2, '0')}`,
+            trafficType: $('#settingsTrafficType').val(),
+            dailyAmount: $('#settingsDailyAmount').val(),
+            totalAmount: $('#settingsTotalAmount').val()
+        };
+
+        console.log('Settings Form Data:', formData);
+
+        // 실제로는 API 호출
+        closeSettingsModal();
+        showCustomAlert('저장 완료', '프로젝트 설정이 변경되었습니다.', [{
+            text: '닫기',
+            class: 'alert-modal-button alert-modal-button-secondary',
+            action: function () {
+                window.location.reload();
+            }
+        }]);
+    }
+
+    // ---------------------------------
+    // 트래픽 히스토리 로드
+    // ---------------------------------
+    function performHistorySearch() {
+        const query = $('#historySearchInput').val().trim();
+        currentSearchQuery = query;
+        historyPage = 0;
+        loadHistory(0);
+    }
+
+    function loadHistory(page = 0) {
+        if (historyLoading) return;
+        historyLoading = true;
+        historyPage = page;
+
+        const apiUrl = `/api/projects/${currentProjectId}/traffic/history`;
+        const params = {
+            page: page,
+            size: historyPageSize
+        };
+
+        if (currentSearchQuery) {
+            params.ip = currentSearchQuery;
+        }
+
+        showHistorySkeleton();
+
+        // 샘플 데이터로 시뮬레이션
+        setTimeout(function() {
+            const sampleData = {
+                content: [
+                    {
+                        id: 1,
+                        ip: '192.168.1.100',
+                        time: '2025-01-15 14:23:45',
+                        duration: '5분 20초',
+                        scrolled: true,
+                        device: 'PC',
+                        sourceName: '메인 페이지',
+                        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+                    },
+                    {
+                        id: 2,
+                        ip: '192.168.1.101',
+                        time: '2025-01-15 14:18:12',
+                        duration: '3분 45초',
+                        scrolled: false,
+                        device: 'Mobile',
+                        sourceName: '서브 페이지',
+                        userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1'
+                    },
+                    {
+                        id: 3,
+                        ip: '192.168.1.102',
+                        time: '2025-01-15 14:12:33',
+                        duration: '2분 15초',
+                        scrolled: true,
+                        device: 'PC',
+                        sourceName: '상세 페이지',
+                        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+                    },
+                    {
+                        id: 4,
+                        ip: '192.168.1.103',
+                        time: '2025-01-15 14:05:21',
+                        duration: '4분 30초',
+                        scrolled: true,
+                        device: 'Mobile',
+                        sourceName: '메인 페이지',
+                        userAgent: 'Mozilla/5.0 (Linux; Android 14; SM-S918B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.6099.210 Mobile Safari/537.36'
+                    },
+                    {
+                        id: 5,
+                        ip: '192.168.1.104',
+                        time: '2025-01-15 13:58:45',
+                        duration: '6분 10초',
+                        scrolled: false,
+                        device: 'PC',
+                        sourceName: '서브 페이지',
+                        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0'
+                    },
+                    {
+                        id: 6,
+                        ip: '192.168.1.105',
+                        time: '2025-01-15 13:52:18',
+                        duration: '1분 50초',
+                        scrolled: true,
+                        device: 'PC',
+                        sourceName: '상세 페이지',
+                        userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+                    },
+                    {
+                        id: 7,
+                        ip: '192.168.1.106',
+                        time: '2025-01-15 13:45:32',
+                        duration: '7분 25초',
+                        scrolled: true,
+                        device: 'Mobile',
+                        sourceName: '메인 페이지',
+                        userAgent: 'Mozilla/5.0 (iPad; CPU OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1'
+                    },
+                    {
+                        id: 8,
+                        ip: '192.168.1.107',
+                        time: '2025-01-15 13:38:55',
+                        duration: '3분 5초',
+                        scrolled: false,
+                        device: 'PC',
+                        sourceName: '서브 페이지',
+                        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0'
+                    },
+                    {
+                        id: 9,
+                        ip: '192.168.1.108',
+                        time: '2025-01-15 13:31:22',
+                        duration: '8분 40초',
+                        scrolled: true,
+                        device: 'Mobile',
+                        sourceName: '상세 페이지',
+                        userAgent: 'Mozilla/5.0 (Linux; Android 14; Pixel 8 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.6099.210 Mobile Safari/537.36'
+                    },
+                    {
+                        id: 10,
+                        ip: '192.168.1.109',
+                        time: '2025-01-15 13:24:10',
+                        duration: '4분 55초',
+                        scrolled: true,
+                        device: 'PC',
+                        sourceName: '메인 페이지',
+                        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15'
+                    }
+                ],
+                totalPages: 5,
+                page: page
+            };
+
+            renderHistory(sampleData);
+            historyLoading = false;
+        }, 800);
+    }
+
+    function showHistorySkeleton() {
+        const skeletonHtml = Array(5).fill(0).map(() => `
+            <div class="history-card skeleton">
+                <div class="skeleton-content">
+                    <div class="skeleton-line ip"></div>
+                    <div class="skeleton-line meta"></div>
+                </div>
+            </div>
+        `).join('');
+
+        $('#historyList').html(skeletonHtml);
+    }
+
+    function renderHistory(data) {
+        const $list = $('#historyList');
+        $list.empty();
+
+        if (data.content.length === 0) {
+            $list.html('<div style="text-align: center; padding: 60px 20px; color: #9ca3af;">트래픽 기록이 없습니다.</div>');
+            return;
+        }
+
+        data.content.forEach(item => {
+            const scrollBadgeClass = item.scrolled ? 'yes' : 'no';
+            const scrollBadgeText = item.scrolled ? 'O' : 'X';
+            const deviceClass = item.device === 'PC' ? 'pc' : 'mobile';
+
+            const html = `
+                <div class="history-card" data-id="${item.id}">
+                    <div class="history-ip">${item.ip}</div>
+                    <div class="history-main">
+                        <div class="history-meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span>${item.time}</span>
+                        </div>
+                        <div class="history-meta-item">
+                            <i class="fas fa-hourglass-half"></i>
+                            <span>${item.duration}</span>
+                        </div>
+                    </div>
+                    <div class="history-source">
+                        <div class="history-source-name">${item.sourceName}</div>
+                        <div class="history-badges">
+                            <span class="scroll-badge ${scrollBadgeClass}">스크롤 ${scrollBadgeText}</span>
+                            <span class="device-badge ${deviceClass}">
+                                ${item.device}
+                                <div class="device-tooltip">${item.userAgent}</div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            $list.append(html);
+        });
+
+        renderHistoryPagination(data.page, data.totalPages);
+    }
+
+    function renderHistoryPagination(currentPage, totalPages) {
+        const $pagination = $('#historyPagination');
+        $pagination.empty();
+
+        // 이전 버튼
+        const prevDisabled = currentPage === 0 ? 'disabled' : '';
+        $pagination.append(`
+            <button class="page-button" data-page="${currentPage - 1}" ${prevDisabled}>
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        `);
+
+        // 페이지 번호
+        const startPage = Math.max(0, currentPage - 2);
+        const endPage = Math.min(totalPages - 1, currentPage + 2);
+
+        for (let i = startPage; i <= endPage; i++) {
+            const activeClass = i === currentPage ? 'active' : '';
+            $pagination.append(`
+                <button class="page-button ${activeClass}" data-page="${i}">${i + 1}</button>
+            `);
+        }
+
+        // 다음 버튼
+        const nextDisabled = currentPage >= totalPages - 1 ? 'disabled' : '';
+        $pagination.append(`
+            <button class="page-button" data-page="${currentPage + 1}" ${nextDisabled}>
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        `);
+    }
+
+    // ---------------------------------
+    // 트래픽 소스 관련
+    // ---------------------------------
+    function openAddSourceModal() {
+        currentEditingSourceId = null;
+        $('#sourceModalTitle').text('트래픽 소스 추가');
+        $('#sourceNameInput').val('');
+        $('#sourcePathInput').val('');
+        $('#sourceDurationInput').val(30);
+        $('.dropdown-button').attr('data-value', 'EXECUTE').find('span').text('스크롤 포함');
+        $('#sourceModal').addClass('show');
+        $('body').addClass('overflow-hidden');
+    }
+
+    function closeSourceModal() {
+        $('#sourceModal').removeClass('show');
+        $('body').removeClass('overflow-hidden');
+    }
+
+    function editSource(sourceId) {
+        currentEditingSourceId = sourceId;
+        $('#sourceModalTitle').text('트래픽 소스 편집');
+
+        // 샘플 데이터 로드 (실제로는 API 호출)
+        const sampleData = {
+            name: sourceId === 1 ? '메인 페이지' : sourceId === 2 ? '서브 페이지' : '상세 페이지',
+            path: 'https://example.com/page' + sourceId,
+            scroll: sourceId % 2 === 0 ? 'FORBIDDEN' : 'EXECUTE',
+            duration: 30 + sourceId * 5
+        };
+
+        $('#sourceNameInput').val(sampleData.name);
+        $('#sourcePathInput').val(sampleData.path);
+        $('#sourceDurationInput').val(sampleData.duration);
+        $('.dropdown-button').attr('data-value', sampleData.scroll).find('span').text(sampleData.scroll === 'EXECUTE' ? '스크롤 포함' : '스크롤 제외');
+
+        $('#sourceModal').addClass('show');
+        $('body').addClass('overflow-hidden');
+    }
+
+    function deleteSource(sourceId) {
+        showCustomAlert('트래픽 소스 삭제', '이 트래픽 소스를 삭제하시겠습니까?', [
+            {
+                text: '삭제',
+                class: 'alert-modal-button alert-modal-button-danger',
+                action: function () {
+                    // 실제로는 API 호출
+                    $(`[data-source-id="${sourceId}"]`).fadeOut(300, function() {
+                        $(this).remove();
+                    });
+                    hideCustomAlert();
+                }
+            },
+            {
+                text: '취소',
+                class: 'alert-modal-button alert-modal-button-secondary',
+                action: function () {
+                    hideCustomAlert();
+                }
+            }
+        ]);
+    }
+
+    $(document).on('click', '#saveSourceBtn', function() {
+        const name = $('#sourceNameInput').val().trim();
+        const path = $('#sourcePathInput').val().trim();
+        const scroll = $('.dropdown-button').attr('data-value');
+        const duration = $('#sourceDurationInput').val();
+
+        if (!name) {
+            alert('소스 이름을 입력해주세요.');
+            return;
+        }
+
+        if (!path) {
+            alert('트래픽 경로를 입력해주세요.');
+            return;
+        }
+
+        if (!duration || duration < 1) {
+            alert('체류 시간을 올바르게 입력해주세요.');
+            return;
+        }
+
+        // 실제로는 API 호출
+        console.log('저장:', {name, path, scroll, duration, id: currentEditingSourceId});
+
+        closeSourceModal();
+        showCustomAlert('저장 완료', '트래픽 소스가 저장되었습니다.');
+    });
+
+</script>
+</body>
+</html>

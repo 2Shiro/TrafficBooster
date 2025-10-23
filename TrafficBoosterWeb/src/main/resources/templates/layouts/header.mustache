@@ -1,0 +1,65 @@
+<!-- header.html -->
+<header class="site-header">
+    <div class="header-container">
+        <div class="header-logo">
+            <a href="/">
+                <img src="https://blogtalk.s3.ap-northeast-2.amazonaws.com/images/blogtalk-header-logo.png" alt="로고">
+            </a>
+        </div>
+
+        <nav class="header-nav">
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="/dashboard" class="nav-link">대시보드</a>
+                </li>
+                <li class="nav-item has-dropdown">
+                    <a href="#" class="nav-link">설정</a>
+                    <div class="dropdown-menu">
+                        <a href="/server" class="dropdown-item">서버</a>
+                        <a href="/ip" class="dropdown-item">아이피</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="/users" class="nav-link">사용자</a>
+                </li>
+            </ul>
+        </nav>
+
+        <button class="mobile-menu-btn" aria-label="메뉴 열기">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+    </div>
+</header>
+
+<div class="mobile-sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-logo">
+            <img src="https://blogtalk.s3.ap-northeast-2.amazonaws.com/images/blogtalk-header-logo.png" alt="로고">
+        </div>
+        <button class="sidebar-close-btn" aria-label="메뉴 닫기">
+            <span class="close-icon">&times;</span>
+        </button>
+    </div>
+
+    <nav class="sidebar-nav">
+        <ul class="sidebar-list">
+            <li class="sidebar-item">
+                <a href="/dashboard" class="sidebar-link">대시보드</a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link sidebar-toggle">설정</a>
+                <ul class="sidebar-submenu">
+                    <li><a href="/server" class="sidebar-sublink">서버</a></li>
+                    <li><a href="/ip" class="sidebar-sublink">아이피</a></li>
+                </ul>
+            </li>
+            <li class="sidebar-item">
+                <a href="/users" class="sidebar-link">사용자</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<div class="sidebar-overlay"></div>

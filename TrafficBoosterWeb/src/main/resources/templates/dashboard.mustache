@@ -1,0 +1,2223 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>앤기브마케팅 대시보드</title>
+
+    {{>layouts/meta}}
+
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/Paperlogy.css');
+
+        * {
+            font-family: 'Paperlogy', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            padding: 20px;
+        }
+
+        .main-content {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* 통계 카드 */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stats-container .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .stats-container .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-container .stat-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stats-container .text-group .txt {
+            font-size: 15px;
+            font-weight: 700;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .stats-container .text-group .tit {
+            font-weight: 700;
+            font-size: 28px;
+            margin: 0;
+            color: #1f2937;
+        }
+
+        .stats-container .stat-icon {
+            display: flex;
+            border-radius: 50%;
+            width: 55px;
+            height: 55px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .stats-container .stat-icon.green {
+            background-color: rgba(209, 250, 229, 1);
+        }
+
+        .stats-container .stat-icon.green i {
+            color: #03c75a;
+            font-size: 22px;
+        }
+
+        .stats-container .stat-icon.blue {
+            background-color: rgba(219, 234, 254, 1);
+        }
+
+        .stats-container .stat-icon.blue i {
+            color: #3b82f6;
+            font-size: 22px;
+        }
+
+        .stats-container .stat-icon.dark {
+            background-color: rgba(243, 244, 246, 1);
+        }
+
+        .stats-container .stat-icon.dark i {
+            color: #6b7280;
+            font-size: 22px;
+        }
+
+        /* 섹션 헤더 */
+        .section-header-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .section-header-group .tit {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0;
+        }
+
+        .section-header-group .section-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .section-header-group .project-add-button {
+            background: linear-gradient(135deg, #020ee2, #5d66ff);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(2, 14, 226, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-header-group .project-add-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(2, 14, 226, 0.3);
+        }
+
+        /* 필터 및 검색 */
+        .filter-search-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+        }
+
+        .filter-search-container .filter-container {
+            padding: 20px 25px;
+            border-bottom: 1px solid #f1f5f9;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .filter-search-container .filter-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-search-container .filter-item label {
+            color: #4b5563;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .filter-search-container .custom-dropdown {
+            position: relative;
+            width: 100%;
+            user-select: none;
+        }
+
+        .filter-search-container .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #374151;
+            transition: all 0.25s ease;
+            min-height: 42px;
+        }
+
+        .filter-search-container .dropdown-toggle:hover {
+            border-color: #020ee2;
+            background-color: #f8faff;
+        }
+
+        .filter-search-container .dropdown-toggle i {
+            transition: transform 0.3s ease;
+            color: #9ca3af;
+        }
+
+        .filter-search-container .dropdown-toggle.active i {
+            transform: rotate(180deg);
+        }
+
+        .filter-search-container .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 0;
+            width: 100%;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            overflow: hidden auto;
+            display: none;
+        }
+
+        .filter-search-container .dropdown-menu.show {
+            display: block;
+            max-height: 200px;
+            padding: 8px 0;
+        }
+
+        .filter-search-container .dropdown-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            color: #374151;
+        }
+
+        .filter-search-container .dropdown-item:hover {
+            background: #f8faff;
+            color: #020ee2;
+        }
+
+        .filter-search-container .dropdown-item.selected {
+            background: rgba(2, 14, 226, 0.1);
+            color: #020ee2;
+            font-weight: 600;
+        }
+
+        .filter-search-container .search-container {
+            padding: 20px 25px;
+        }
+
+        .filter-search-container .search-input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .filter-search-container .search-input {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background-color: white;
+            font-size: 14px;
+            color: #374151;
+            transition: all 0.25s ease;
+        }
+
+        .filter-search-container .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        .filter-search-container .search-input:hover {
+            border-color: #020ee2;
+            background-color: #f8faff;
+        }
+
+        .filter-search-container .search-input:focus {
+            outline: none;
+            border-color: #020ee2;
+            box-shadow: 0 0 0 3px rgba(2, 14, 226, 0.1);
+        }
+
+        /* 완료 프로젝트 제외 토글 */
+        .exclude-completed-toggle {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+            padding: 20px 25px;
+            display: none;
+        }
+
+        .exclude-completed-toggle.show {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .exclude-completed-toggle .toggle-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .exclude-completed-toggle .toggle-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .exclude-completed-toggle .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .exclude-completed-toggle .toggle-switch.active {
+            background: #020ee2;
+        }
+
+        .exclude-completed-toggle .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .exclude-completed-toggle .toggle-switch.active::after {
+            left: 22px;
+        }
+
+        /* 스켈레톤 로딩 */
+        .skeleton-container {
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .skeleton-container.show {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .skeleton-container .skeleton-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 120px;
+        }
+
+        .skeleton-container .skeleton-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .skeleton-container .skeleton-right {
+            display: flex;
+            gap: 20px;
+        }
+
+        .skeleton-container .skeleton-line {
+            height: 20px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skeleton-container .skeleton-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+
+        .skeleton-container .skeleton-line.short {
+            width: 30%;
+        }
+
+        .skeleton-container .skeleton-line.medium {
+            width: 50%;
+        }
+
+        .skeleton-container .skeleton-line.full {
+            width: 100%;
+        }
+
+        .skeleton-container .skeleton-badge {
+            height: 30px;
+            width: 100px;
+            background: #f0f0f0;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skeleton-container .skeleton-badge::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+
+        .skeleton-container .skeleton-stat-card {
+            width: 120px;
+            height: 60px;
+            background: #f0f0f0;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skeleton-container .skeleton-stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        /* 리스트 뷰 */
+        .cards-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .cards-list.hidden {
+            display: none;
+        }
+
+        .cards-list .project-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            cursor: pointer;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .cards-list .project-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 카드 오버레이 */
+        .cards-list .card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            border-radius: 15px;
+        }
+
+        .cards-list .project-card:hover .card-overlay {
+            display: flex;
+        }
+
+        .cards-list .card-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .cards-list .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .cards-list .card-number {
+            background: rgba(2, 14, 226, 0.08);
+            color: #020ee2;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .cards-list .status-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .cards-list .status-ongoing {
+            background: linear-gradient(145deg, #e3f7eb, #d0ffe0);
+            color: #00a847;
+        }
+
+        .cards-list .status-paused {
+            background: linear-gradient(145deg, #fef3c7, #fde68a);
+            color: #d97706;
+        }
+
+        .cards-list .status-completed {
+            background: linear-gradient(145deg, #f3f4f6, #e5e7eb);
+            color: #6b7280;
+        }
+
+        .cards-list .status-canceled {
+            background: linear-gradient(145deg, #fee2e2, #fecaca);
+            color: #dc2626;
+        }
+
+        .cards-list .project-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+            line-height: 1.3;
+            margin: 0;
+        }
+
+        .cards-list .card-info {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .cards-list .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .cards-list .info-label {
+            font-size: 13px;
+            color: #9ca3af;
+            font-weight: 500;
+        }
+
+        .cards-list .info-value {
+            font-size: 15px;
+            color: #374151;
+            font-weight: 600;
+        }
+
+        .cards-list .card-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .cards-list .stat-mini-card {
+            background: linear-gradient(135deg, #f8faff, #eef6ff);
+            border: 1px solid #d1e5ff;
+            border-radius: 12px;
+            padding: 15px 20px;
+            min-width: 120px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .cards-list .stat-mini-card.completed {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border-color: #0ea5e9;
+        }
+
+        .cards-list .stat-mini-title {
+            font-size: 11px;
+            color: #6b7280;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cards-list .stat-mini-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #020ee2;
+        }
+
+        .cards-list .stat-mini-card.completed .stat-mini-value {
+            color: #0ea5e9;
+        }
+
+        .cards-list .card-actions-wrapper {
+            display: flex;
+            gap: 12px;
+            z-index: 20;
+        }
+
+        .cards-list .card-action-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.25s ease;
+        }
+
+        .cards-list .card-action-icon:hover {
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        .cards-list .card-settings-icon {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+        }
+
+        .cards-list .card-report-icon {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .cards-list .card-delete-icon {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        /* 완료 상태 배너 */
+        .cards-list .completed-banner {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border: 2px solid #0ea5e9;
+            border-radius: 12px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cards-list .completed-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .cards-list .completed-text {
+            flex: 1;
+        }
+
+        .cards-list .completed-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0c4a6e;
+            margin-bottom: 5px;
+        }
+
+        .cards-list .completed-stats {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #0369a1;
+        }
+
+        .cards-list .completed-target {
+            font-weight: 600;
+        }
+
+        .cards-list .completed-bonus {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+        }
+
+        /* 빈 상태 */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .empty-state.show {
+            display: block;
+        }
+
+        .empty-state .empty-icon {
+            font-size: 48px;
+            color: #9ca3af;
+            margin-bottom: 20px;
+        }
+
+        .empty-state .empty-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+
+        .empty-state .empty-message {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* 페이지네이션 */
+        .pagination-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .pagination-container .page-info {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 15px;
+        }
+
+        .pagination-container .page-info strong {
+            color: #020ee2;
+            font-weight: 600;
+        }
+
+        .pagination-container .page-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .pagination-container .page-button {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: #374151;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 36px;
+            text-align: center;
+        }
+
+        .pagination-container .page-button:hover {
+            background: #f8faff;
+            border-color: #020ee2;
+            color: #020ee2;
+        }
+
+        .pagination-container .page-button.active {
+            background: #020ee2;
+            border-color: #020ee2;
+            color: white;
+        }
+
+        .pagination-container .page-button:disabled {
+            background: #f9fafb;
+            border-color: #e2e8f0;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .pagination-container .page-button:disabled:hover {
+            background: #f9fafb;
+            border-color: #e2e8f0;
+            color: #9ca3af;
+        }
+
+        /* 모달 공통 스타일 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-overlay .modal {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+            width: 90%;
+            max-width: 650px;
+        }
+
+        .modal-overlay.show .modal {
+            transform: translateY(0);
+        }
+
+        .modal-overlay .modal-header {
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .modal-overlay .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0;
+        }
+
+        .modal-overlay .modal-close {
+            background: transparent;
+            border: none;
+            font-size: 24px;
+            color: #9ca3af;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .modal-overlay .modal-close:hover {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .modal-overlay .modal-content {
+            padding: 30px;
+        }
+
+        .modal-overlay .modal-footer {
+            padding: 25px 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        /* 필수 필드 표시 */
+        .form-label .required {
+            color: #ef4444;
+        }
+
+        .add-project-modal .form-group {
+            margin-bottom: 25px;
+        }
+
+        .add-project-modal .form-group-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .add-project-modal .form-group-col {
+            flex: 1;
+        }
+
+        .add-project-modal .form-label {
+            display: block;
+            font-size: 15px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .add-project-modal .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #374151;
+            transition: all 0.25s ease;
+            background: white;
+            position: relative;
+        }
+
+        .add-project-modal .form-input:focus {
+            outline: none;
+            border-color: #020ee2;
+            box-shadow: 0 0 0 3px rgba(2, 14, 226, 0.1);
+        }
+
+        .add-project-modal .form-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .add-project-modal .form-input.error {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        .add-project-modal .form-input:disabled {
+            background-color: #f9fafb;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .add-project-modal .error-message {
+            color: #ef4444;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .add-project-modal .error-message.show {
+            display: block;
+        }
+
+        .add-project-modal .custom-dropdown {
+            position: relative;
+            width: 100%;
+            user-select: none;
+        }
+
+        .add-project-modal .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 15px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #374151;
+            transition: all 0.25s ease;
+            min-height: 42px;
+        }
+
+        .add-project-modal .dropdown-toggle:hover {
+            border-color: #020ee2;
+            background-color: #f8faff;
+        }
+
+        .add-project-modal .dropdown-toggle i {
+            transition: transform 0.3s ease;
+            color: #9ca3af;
+        }
+
+        .add-project-modal .dropdown-toggle.active i {
+            transform: rotate(180deg);
+        }
+
+        .add-project-modal .dropdown-toggle.error {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        .add-project-modal .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 0;
+            width: 100%;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            overflow: hidden auto;
+            display: none;
+        }
+
+        .add-project-modal .dropdown-menu.show {
+            display: block;
+            max-height: 200px;
+            padding: 8px 0;
+        }
+
+        .add-project-modal .dropdown-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            color: #374151;
+        }
+
+        .add-project-modal .dropdown-item:hover {
+            background: #f8faff;
+            color: #020ee2;
+        }
+
+        .add-project-modal .dropdown-item.selected {
+            background: rgba(2, 14, 226, 0.1);
+            color: #020ee2;
+            font-weight: 600;
+        }
+
+        .add-project-modal .date-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .add-project-modal .date-dropdown {
+            flex: 1;
+            position: relative;
+        }
+
+        .add-project-modal .add-project-cancel-button {
+            background: #f3f4f6;
+            color: #4b5563;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .add-project-modal .add-project-cancel-button:hover {
+            background: #e5e7eb;
+        }
+
+        .add-project-modal .add-project-submit-button {
+            background: #020ee2;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .add-project-modal .add-project-submit-button:hover {
+            background: #010cc0;
+        }
+
+        .add-project-modal .add-project-submit-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        /* 반응형 */
+        @media (max-width: 1024px) {
+            .cards-list .project-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .cards-list .card-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-search-container .filter-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .section-header-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .section-header-group .section-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .add-project-modal .form-group-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .add-project-modal .date-selector {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .pagination-container .page-buttons {
+                flex-wrap: wrap;
+            }
+
+            .cards-list .card-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .cards-list .card-right {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .cards-list .card-actions-wrapper {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+
+{{>layouts/loader}}
+{{>layouts/header}}
+
+<div class="main-content">
+    <!-- 통계 카드 -->
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="stat-inner">
+                <div class="text-group">
+                    <p class="txt">등록된 프로젝트</p>
+                    <h2 class="tit" id="totalProjectsCount">0</h2>
+                </div>
+                <div class="stat-icon green">
+                    <i class="fas fa-folder"></i>
+                </div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-inner">
+                <div class="text-group">
+                    <p class="txt">진행중인 프로젝트</p>
+                    <h2 class="tit" id="ongoingProjectsCount">0</h2>
+                </div>
+                <div class="stat-icon blue">
+                    <i class="fas fa-spinner"></i>
+                </div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-inner">
+                <div class="text-group">
+                    <p class="txt">완료된 프로젝트</p>
+                    <h2 class="tit" id="completedProjectsCount">0</h2>
+                </div>
+                <div class="stat-icon dark">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 프로젝트 목록 섹션 -->
+    <div class="section-header-group">
+        <h2 class="tit">프로젝트 목록</h2>
+        <div class="section-controls">
+            <button id="addProjectBtn" class="project-add-button">
+                <i class="fas fa-plus"></i>
+                프로젝트 등록하기
+            </button>
+        </div>
+    </div>
+
+    <!-- 필터 및 검색 -->
+    <div class="filter-search-container">
+        <div class="filter-container">
+            <div class="filter-item">
+                <label>표시 개수</label>
+                <div class="custom-dropdown" id="pageSizeFilter">
+                    <div class="dropdown-toggle">
+                        <span class="selected-option">12개</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-item selected" data-value="12">12개</div>
+                        <div class="dropdown-item" data-value="24">24개</div>
+                        <div class="dropdown-item" data-value="36">36개</div>
+                    </div>
+                </div>
+            </div>
+            <div class="filter-item">
+                <label>프로젝트 상태</label>
+                <div class="custom-dropdown" id="statusFilter">
+                    <div class="dropdown-toggle">
+                        <span class="selected-option">전체</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-item selected" data-value="ALL">전체</div>
+                        <div class="dropdown-item" data-value="ONGOING">진행중</div>
+                        <div class="dropdown-item" data-value="COMPLETED">완료됨</div>
+                        <div class="dropdown-item" data-value="CANCELED">취소됨</div>
+                    </div>
+                </div>
+            </div>
+            <div class="filter-item">
+                <label>일 유입 목표량</label>
+                <div class="custom-dropdown" id="dailyPostFilter">
+                    <div class="dropdown-toggle">
+                        <span class="selected-option">선택</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-item selected" data-value="">선택</div>
+                        <div class="dropdown-item" data-value="desc">많은순</div>
+                        <div class="dropdown-item" data-value="asc">적은순</div>
+                    </div>
+                </div>
+            </div>
+            <div class="filter-item">
+                <label>총 유입 목표량</label>
+                <div class="custom-dropdown" id="totalPostFilter">
+                    <div class="dropdown-toggle">
+                        <span class="selected-option">선택</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-item selected" data-value="">선택</div>
+                        <div class="dropdown-item" data-value="desc">많은순</div>
+                        <div class="dropdown-item" data-value="asc">적은순</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="search-container">
+            <div class="search-input-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="searchInput" placeholder="프로젝트 명을 입력하세요.">
+            </div>
+        </div>
+    </div>
+
+    <!-- 금일 완료된 프로젝트 제외 토글 -->
+    <div class="exclude-completed-toggle show" id="excludeCompletedToggle">
+        <div class="toggle-wrapper">
+            <span class="toggle-label">금일 완료된 프로젝트 제외</span>
+            <div class="toggle-switch" id="excludeCompletedSwitch">
+                <input type="hidden" id="excludeCompleted" value="false">
+            </div>
+        </div>
+    </div>
+
+    <!-- 스켈레톤 -->
+    <div class="skeleton-container" id="skeletonContainer">
+        <div class="skeleton-card">
+            <div class="skeleton-left">
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-badge"></div>
+                <div class="skeleton-line full"></div>
+            </div>
+            <div class="skeleton-right">
+                <div class="skeleton-stat-card"></div>
+                <div class="skeleton-stat-card"></div>
+            </div>
+        </div>
+        <div class="skeleton-card">
+            <div class="skeleton-left">
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-badge"></div>
+                <div class="skeleton-line full"></div>
+            </div>
+            <div class="skeleton-right">
+                <div class="skeleton-stat-card"></div>
+                <div class="skeleton-stat-card"></div>
+            </div>
+        </div>
+        <div class="skeleton-card">
+            <div class="skeleton-left">
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-badge"></div>
+                <div class="skeleton-line full"></div>
+            </div>
+            <div class="skeleton-right">
+                <div class="skeleton-stat-card"></div>
+                <div class="skeleton-stat-card"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 빈 상태 -->
+    <div class="empty-state" id="emptyState">
+        <div class="empty-icon">
+            <i class="fas fa-search"></i>
+        </div>
+        <h3 class="empty-title">일치하거나 등록된 프로젝트가 존재하지 않습니다.</h3>
+        <p class="empty-message">다른 검색어를 시도하거나 새로운 프로젝트를 등록해보세요.</p>
+    </div>
+
+    <!-- 리스트 뷰 -->
+    <div class="cards-list" id="cardsGrid"></div>
+
+    <!-- 페이지네이션 -->
+    <div class="pagination-container" id="paginationContainer">
+        <div class="page-info" id="pageInfo">
+            <strong>0</strong>개 중 <strong>0-0</strong> 표시 (총 <strong>0</strong> 페이지)
+        </div>
+        <div class="page-buttons" id="pageButtons"></div>
+    </div>
+</div>
+
+<!-- 프로젝트 추가 모달 -->
+<div class="modal-overlay add-project-modal" id="addProjectModalOverlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">프로젝트 등록하기</h3>
+            <button class="modal-close" id="addProjectModalClose">×</button>
+        </div>
+        <div class="modal-content">
+            <form id="projectForm">
+                <!-- 프로젝트명 -->
+                <div class="form-group">
+                    <label class="form-label">프로젝트 명 <span class="required">*</span></label>
+                    <input type="text" class="form-input" id="projectName" name="projectName"
+                           placeholder="프로젝트 이름을 입력해주세요." required>
+                    <div class="error-message">프로젝트 명을 입력해주세요.</div>
+                </div>
+
+                <!-- 대상 주소 -->
+                <div class="form-group">
+                    <label class="form-label">대상 주소 <span class="required">*</span></label>
+                    <input type="text" class="form-input" id="targetAddress" name="targetAddress"
+                           placeholder="https://example.com" required>
+                    <div class="error-message">대상 주소를 입력해주세요.</div>
+                </div>
+
+                <!-- 프로젝트 시작일 -->
+                <div class="form-group">
+                    <label class="form-label">프로젝트 시작일 <span class="required">*</span></label>
+                    <div class="date-selector">
+                        <div class="date-dropdown">
+                            <div class="custom-dropdown">
+                                <div class="dropdown-toggle">
+                                    <span class="selected-option" data-value="2025">2025년</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="dropdown-menu" id="yearDropdownMenu"></div>
+                            </div>
+                            <input type="hidden" id="projectYear" name="projectYear" required value="2025">
+                            <div class="error-message">연도를 선택해주세요.</div>
+                        </div>
+                        <div class="date-dropdown">
+                            <div class="custom-dropdown">
+                                <div class="dropdown-toggle">
+                                    <span class="selected-option" data-value="10">10월</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="dropdown-menu" id="monthDropdownMenu"></div>
+                            </div>
+                            <input type="hidden" id="projectMonth" name="projectMonth" required value="10">
+                            <div class="error-message">월을 선택해주세요.</div>
+                        </div>
+                        <div class="date-dropdown">
+                            <div class="custom-dropdown">
+                                <div class="dropdown-toggle">
+                                    <span class="selected-option" data-value="22">22일</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="dropdown-menu" id="dayDropdownMenu"></div>
+                            </div>
+                            <input type="hidden" id="projectDay" name="projectDay" required value="22">
+                            <div class="error-message">일을 선택해주세요.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 트래픽 타입 + 유입량 -->
+                <div class="form-group-row">
+                    <!-- 트래픽 타입 -->
+                    <div class="form-group-col">
+                        <label class="form-label">트래픽 타입 <span class="required">*</span></label>
+                        <div class="custom-dropdown" id="trafficTypeDropdown">
+                            <div class="dropdown-toggle">
+                                <span class="selected-option">선택</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="dropdown-menu" id="trafficTypeDropdownMenu">
+                                <div class="dropdown-item" data-value="DEDICATED_PROXY">고정 IP</div>
+                                <div class="dropdown-item" data-value="DATACENTER_PROXY">유동 IP</div>
+                                <div class="dropdown-item" data-value="TETHERING">테더링</div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="trafficType" name="trafficType" required>
+                        <div class="error-message">트래픽 타입을 선택해주세요.</div>
+                    </div>
+
+                    <!-- 일 유입량 -->
+                    <div class="form-group-col">
+                        <label class="form-label">일 유입량 <span class="required">*</span></label>
+                        <input type="number" class="form-input" id="dailyAmount" name="dailyAmount"
+                               placeholder="숫자를 입력해주세요" min="1" required>
+                        <div class="error-message">일 유입량을 입력해주세요.</div>
+                    </div>
+
+                    <!-- 총 유입량 -->
+                    <div class="form-group-col">
+                        <label class="form-label">총 유입량 <span class="required">*</span></label>
+                        <input type="number" class="form-input" id="totalAmount" name="totalAmount"
+                               placeholder="숫자를 입력해주세요" min="1" required>
+                        <div class="error-message" id="totalAmountError">총 유입량을 입력해주세요.</div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="add-project-cancel-button" id="cancelProjectBtn">취소</button>
+            <button type="button" class="add-project-submit-button" id="submitProjectBtn" disabled>등록하기</button>
+        </div>
+    </div>
+</div>
+
+{{>layouts/script}}
+<script>
+    // 에러 파싱 유틸리티
+    const ErrorUtils = {
+        parseError: async function(response) {
+            try {
+                const text = await response.text();
+                const errorData = this.safeJsonParse(text);
+                if (errorData && errorData.error && errorData.error.message) {
+                    return errorData.error.message;
+                }
+                return '요청 처리 중 오류가 발생했습니다.';
+            } catch (e) {
+                return '요청 처리 중 오류가 발생했습니다.';
+            }
+        },
+        safeJsonParse: function(value) {
+            try {
+                const first = (typeof value === 'string') ? JSON.parse(value) : value;
+                if (typeof first === 'string') {
+                    return JSON.parse(first);
+                }
+                return first;
+            } catch (e) {
+                return null;
+            }
+        },
+        showError: function(message, duration = 3000) {
+            if (typeof showTypedToast === 'function') {
+                showTypedToast(message, 'error', duration);
+            } else {
+                alert(message);
+            }
+        }
+    };
+
+    // 전역 변수
+    let currentData = {
+        projects: [],
+        totalCount: 0,
+        currentPage: 0,
+        pageSize: 12,
+        totalPages: 0,
+        filters: {
+            pageSize: 12,
+            statusFilter: 'ALL',
+            dailyTargetTrafficCountDesc: null,
+            totalTargetTrafficCountDesc: null,
+            searchInput: '',
+            excludeDailyCompleted: false
+        }
+    };
+
+    // 유틸 함수들
+    function showInfoToast(message, duration = 2000) {
+        if (typeof showTypedToast === 'function') {
+            showTypedToast(message, 'info', duration);
+        }
+    }
+
+    // 진행률 계산
+    function calculateProgress(uploaded, target) {
+        if (!target || target === 0) return 0;
+        return Math.min(100, Math.round((uploaded / target) * 100));
+    }
+
+    // 프로젝트 카드 생성
+    function createProjectCard(project, index) {
+        let statusClass = null;
+        let projecStatus = project.status || project.statusLabel || '진행중';
+        if (projecStatus === '진행중') {
+            statusClass = 'status-ongoing';
+        } else if (projecStatus === '취소됨') {
+            statusClass = 'status-canceled';
+        } else {
+            statusClass = 'status-completed';
+        }
+
+        const isCompleted = project.currentTotalCount >= project.totalTargetTrafficCount;
+        const dailyProgress = calculateProgress(project.currentDailyCount, project.dailyTargetTrafficCount);
+        const totalProgress = calculateProgress(project.currentTotalCount, project.totalTargetTrafficCount);
+
+        const projectName = project.name || project.projectName || '프로젝트';
+
+        let completedBanner = '';
+        if (isCompleted) {
+            const bonus = project.currentTotalCount - project.totalTargetTrafficCount;
+            completedBanner = `
+                <div class="completed-banner">
+                    <div class="completed-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="completed-text">
+                        <div class="completed-title">모든 포스팅 완료!</div>
+                        <div class="completed-stats">
+                            <span class="completed-target">목표: ${project.totalTargetTrafficCount}회</span>
+                            ${bonus > 0 ? `<span class="completed-bonus">BONUS ${bonus}회</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        return `
+            <div class="project-card" data-project-id="${project.id}">
+                <div class="card-overlay">
+                    <div class="card-actions-wrapper">
+                        <div class="card-action-icon card-settings-icon">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <div class="card-action-icon card-report-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="card-action-icon card-delete-icon">
+                            <i class="fas fa-trash-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-left">
+                    <div class="card-header">
+                        <div class="card-number">${index + 1}</div>
+                        <span class="status-badge ${statusClass}">${projecStatus}</span>
+                        <h3 class="project-name">${projectName}</h3>
+                    </div>
+                    ${completedBanner}
+                    <div class="card-info">
+                        <div class="info-item">
+                            <span class="info-label">일 유입</span>
+                            <span class="info-value">${project.currentDailyCount} / ${project.dailyTargetTrafficCount}회</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">총 유입</span>
+                            <span class="info-value">${project.currentTotalCount} / ${project.totalTargetTrafficCount}회</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-right">
+                    <div class="stat-mini-card">
+                        <div class="stat-mini-title">일일 달성률</div>
+                        <div class="stat-mini-value">${dailyProgress}%</div>
+                    </div>
+                    <div class="stat-mini-card ${isCompleted ? 'completed' : ''}">
+                        <div class="stat-mini-title">전체 달성률</div>
+                        <div class="stat-mini-value">${totalProgress}%</div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // 토글 상태 업데이트 함수
+    function updateExcludeCompletedToggle() {
+        const currentStatus = currentData.filters.statusFilter;
+        const shouldShow = currentStatus === 'ALL' || currentStatus === 'ONGOING';
+
+        if (shouldShow) {
+            $('#excludeCompletedToggle').addClass('show');
+        } else {
+            $('#excludeCompletedToggle').removeClass('show');
+            currentData.filters.excludeDailyCompleted = false;
+            $('#excludeCompleted').val('false');
+            $('#excludeCompletedSwitch').removeClass('active');
+        }
+    }
+
+    // 페이지네이션 생성
+    function createPagination(currentPage, totalPages) {
+        if (totalPages <= 1) return '';
+
+        let buttons = [];
+
+        buttons.push(`
+            <button class="page-button" ${currentPage <= 0 ? 'disabled' : ''} data-page="${currentPage - 1}">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        `);
+
+        let startPage = Math.max(0, currentPage - 1);
+        let endPage = Math.min(totalPages - 1, startPage + 2);
+
+        if (endPage - startPage < 2) {
+            startPage = Math.max(0, endPage - 2);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            buttons.push(`
+                <button class="page-button ${i === currentPage ? 'active' : ''}" data-page="${i}">
+                    ${i + 1}
+                </button>
+            `);
+        }
+
+        buttons.push(`
+            <button class="page-button" ${currentPage >= totalPages - 1 ? 'disabled' : ''} data-page="${currentPage + 1}">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        `);
+
+        return buttons.join('');
+    }
+
+    // 프로젝트 데이터 로드
+    async function loadProjects(page = 0) {
+        try {
+            $('#skeletonContainer').addClass('show');
+            $('#cardsGrid').addClass('hidden');
+            $('#emptyState').removeClass('show');
+
+            const requestData = {
+                page: page,
+                pageSize: currentData.filters.pageSize,
+                statusFilter: currentData.filters.statusFilter === 'ALL' ? null : currentData.filters.statusFilter,
+                dailyTargetTrafficCountDesc: currentData.filters.dailyTargetTrafficCountDesc,
+                totalTargetTrafficCountDesc: currentData.filters.totalTargetTrafficCountDesc,
+                searchInput: currentData.filters.searchInput || null,
+                excludeDailyCompleted: currentData.filters.excludeDailyCompleted
+            };
+
+            const response = await fetch('/api/projects/load', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(requestData)
+            });
+
+            if (!response.ok) {
+                const errorMessage = await ErrorUtils.parseError(response);
+                throw new Error(errorMessage);
+            }
+
+            const data = await response.json();
+
+            currentData.projects = data.content || [];
+            currentData.totalCount = data.totalElements || 0;
+            currentData.currentPage = data.page || 0;
+            currentData.pageSize = data.pageSize || 12;
+            currentData.totalPages = data.totalPages || 0;
+
+            updateProjectsDisplay();
+            updateStatistics();
+            updatePagination();
+
+        } catch (error) {
+            ErrorUtils.showError(error.message);
+            $('#skeletonContainer').removeClass('show');
+            $('#emptyState').addClass('show');
+            $('#cardsGrid').addClass('hidden');
+        } finally {
+            setTimeout(() => {
+                $('#skeletonContainer').removeClass('show');
+            }, 300);
+        }
+    }
+
+    // 프로젝트 표시 업데이트
+    function updateProjectsDisplay() {
+        const $cardsGrid = $('#cardsGrid');
+
+        if (currentData.projects.length === 0) {
+            $cardsGrid.addClass('hidden');
+            $('#emptyState').addClass('show');
+            return;
+        }
+
+        $('#emptyState').removeClass('show');
+        $cardsGrid.removeClass('hidden');
+
+        const cardsHtml = currentData.projects.map((project, index) =>
+                createProjectCard(project, currentData.currentPage * currentData.pageSize + index)
+        ).join('');
+
+        $cardsGrid.html(cardsHtml);
+    }
+
+    // 통계 업데이트
+    function updateStatistics() {
+        const total = currentData.totalCount;
+        const ongoing = currentData.projects.filter(p => (p.statusLabel || p.status) === '진행중').length;
+        const completed = currentData.projects.filter(p => (p.statusLabel || p.status) === '완료됨').length;
+
+        $('#totalProjectsCount').text(total);
+        $('#ongoingProjectsCount').text(ongoing);
+        $('#completedProjectsCount').text(completed);
+    }
+
+    // 페이지네이션 업데이트
+    function updatePagination() {
+        const startIndex = currentData.currentPage * currentData.pageSize + 1;
+        const endIndex = Math.min((currentData.currentPage + 1) * currentData.pageSize, currentData.totalCount);
+
+        $('#pageInfo').html(`
+            <strong>${currentData.totalCount}</strong>개 중 <strong>${startIndex}-${endIndex}</strong> 표시 (총 <strong>${currentData.totalPages}</strong> 페이지)
+        `);
+
+        const paginationHtml = createPagination(currentData.currentPage, currentData.totalPages);
+        $('#pageButtons').html(paginationHtml);
+
+        if (currentData.totalPages <= 1) {
+            $('#paginationContainer').hide();
+        } else {
+            $('#paginationContainer').show();
+        }
+    }
+
+    // 필터 적용
+    function applyFilters() {
+        currentData.currentPage = 0;
+        updateExcludeCompletedToggle();
+        loadProjects(0);
+    }
+
+    // 상호 배타적 필터 처리
+    function handleMutuallyExclusiveFilters(activeFilter) {
+        if (activeFilter === 'daily') {
+            $('#totalPostFilter .selected-option').text('선택');
+            $('#totalPostFilter .dropdown-item').removeClass('selected');
+            $('#totalPostFilter .dropdown-item[data-value=""]').addClass('selected');
+            currentData.filters.totalTargetTrafficCountDesc = null;
+        } else if (activeFilter === 'total') {
+            $('#dailyPostFilter .selected-option').text('선택');
+            $('#dailyPostFilter .dropdown-item').removeClass('selected');
+            $('#dailyPostFilter .dropdown-item[data-value=""]').addClass('selected');
+            currentData.filters.dailyTargetTrafficCountDesc = null;
+        }
+    }
+
+    // 드롭다운 초기화
+    function initDropdowns() {
+        $('.filter-search-container .custom-dropdown, .add-project-modal .custom-dropdown').each(function () {
+            const $dropdown = $(this);
+            const $toggle = $dropdown.find('.dropdown-toggle');
+            const $menu = $dropdown.find('.dropdown-menu');
+            const $selected = $toggle.find('.selected-option');
+
+            $toggle.on('click', function (e) {
+                e.stopPropagation();
+
+                const isFilterContainer = $dropdown.closest('.filter-search-container').length > 0;
+
+                if (isFilterContainer) {
+                    $('.filter-search-container .custom-dropdown').not($dropdown).find('.dropdown-toggle').removeClass('active');
+                    $('.filter-search-container .custom-dropdown').not($dropdown).find('.dropdown-menu').removeClass('show');
+                } else {
+                    $('.add-project-modal .custom-dropdown').not($dropdown).find('.dropdown-toggle').removeClass('active');
+                    $('.add-project-modal .custom-dropdown').not($dropdown).find('.dropdown-menu').removeClass('show');
+                }
+
+                $toggle.toggleClass('active');
+                $menu.toggleClass('show');
+            });
+
+            $menu.on('click', '.dropdown-item', function () {
+                const text = $(this).text();
+                const value = $(this).data('value') ?? '';
+
+                $menu.find('.dropdown-item').removeClass('selected');
+                $(this).addClass('selected');
+                $selected.text(text);
+                $toggle.removeClass('active');
+                $menu.removeClass('show');
+
+                const dropdownId = $dropdown.attr('id');
+
+                if (dropdownId === 'pageSizeFilter') {
+                    currentData.filters.pageSize = parseInt(value) || 12;
+                    applyFilters();
+                } else if (dropdownId === 'statusFilter') {
+                    currentData.filters.statusFilter = value;
+                    applyFilters();
+                } else if (dropdownId === 'dailyPostFilter') {
+                    if (value === 'desc') {
+                        currentData.filters.dailyTargetTrafficCountDesc = true;
+                        handleMutuallyExclusiveFilters('daily');
+                    } else if (value === 'asc') {
+                        currentData.filters.dailyTargetTrafficCountDesc = false;
+                        handleMutuallyExclusiveFilters('daily');
+                    } else {
+                        currentData.filters.dailyTargetTrafficCountDesc = null;
+                    }
+                    applyFilters();
+                } else if (dropdownId === 'totalPostFilter') {
+                    if (value === 'desc') {
+                        currentData.filters.totalTargetTrafficCountDesc = true;
+                        handleMutuallyExclusiveFilters('total');
+                    } else if (value === 'asc') {
+                        currentData.filters.totalTargetTrafficCountDesc = false;
+                        handleMutuallyExclusiveFilters('total');
+                    } else {
+                        currentData.filters.totalTargetTrafficCountDesc = null;
+                    }
+                    applyFilters();
+                }
+
+                const hiddenInput = $dropdown.siblings('input[type="hidden"]');
+                if (hiddenInput.length) hiddenInput.val(value);
+
+                if ($menu.attr('id') === 'monthDropdownMenu' || $menu.attr('id') === 'yearDropdownMenu') {
+                    const yearVal = $('#projectYear').val();
+                    const monthVal = $('#projectMonth').val();
+                    const y = parseInt(yearVal, 10);
+                    const m = parseInt(monthVal, 10);
+                    if (y && m) {
+                        updateDayOptions(y, m);
+                    }
+                }
+
+                validateAllFields();
+            });
+        });
+
+        $(document).on('click', function () {
+            $('.dropdown-toggle').removeClass('active');
+            $('.dropdown-menu').removeClass('show');
+        });
+    }
+
+    // 페이지네이션 이벤트
+    function initPagination() {
+        $(document).on('click', '.page-button:not(:disabled)', function () {
+            const page = parseInt($(this).data('page'));
+            if (page >= 0 && page !== currentData.currentPage) {
+                currentData.currentPage = page;
+                loadProjects(page);
+            }
+        });
+    }
+
+    // 검색 기능
+    function initSearch() {
+        let searchTimeout;
+
+        $('#searchInput').on('input', function () {
+            clearTimeout(searchTimeout);
+            const searchTerm = $(this).val().trim();
+
+            searchTimeout = setTimeout(() => {
+                currentData.filters.searchInput = searchTerm;
+                applyFilters();
+            }, 500);
+        });
+
+        $('#searchInput').on('keypress', function (e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                clearTimeout(searchTimeout);
+                currentData.filters.searchInput = $(this).val().trim();
+                applyFilters();
+            }
+        });
+
+        $('.search-icon').on('click', function () {
+            currentData.filters.searchInput = $('#searchInput').val().trim();
+            applyFilters();
+        });
+    }
+
+    // 프로젝트 추가 모달 관련 함수들
+    function setSubmitEnabled(enabled) {
+        $('#submitProjectBtn').prop('disabled', !enabled);
+    }
+
+    function validateAllFields() {
+        const projectName = $('#projectName').val() && $('#projectName').val().trim();
+        const targetAddress = $('#targetAddress').val() && $('#targetAddress').val().trim();
+        const year = $('#projectYear').val();
+        const month = $('#projectMonth').val();
+        const day = $('#projectDay').val();
+        const trafficType = $('#trafficType').val();
+        const daily = parseInt($('#dailyAmount').val(), 10) || 0;
+        const total = parseInt($('#totalAmount').val(), 10) || 0;
+        const dailyTotalValid = daily > 0 && total > 0 && daily <= total;
+
+        const allValid = projectName && targetAddress && year && month && day && trafficType && dailyTotalValid;
+        setSubmitEnabled(allValid);
+    }
+
+    function initDateSelectors() {
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = now.getMonth() + 1;
+        const d = now.getDate();
+
+        const $yearMenu = $('#yearDropdownMenu').empty();
+        for (let year = y; year <= y + 5; year++) {
+            const sel = (year === y) ? ' selected' : '';
+            $yearMenu.append(`<div class="dropdown-item${sel}" data-value="${year}">${year}년</div>`);
+        }
+
+        const $monthMenu = $('#monthDropdownMenu').empty();
+        for (let month = 1; month <= 12; month++) {
+            const sel = (month === m) ? ' selected' : '';
+            $monthMenu.append(`<div class="dropdown-item${sel}" data-value="${month}">${month}월</div>`);
+        }
+
+        updateDayOptions(y, m, d);
+
+        $('#projectYear').val(y);
+        $('#projectMonth').val(m);
+        $('#projectDay').val(d);
+
+        $('#yearDropdownMenu').closest('.custom-dropdown').find('.selected-option').text(`${y}년`).attr('data-value', y);
+        $('#monthDropdownMenu').closest('.custom-dropdown').find('.selected-option').text(`${m}월`).attr('data-value', m);
+        $('#dayDropdownMenu').closest('.custom-dropdown').find('.selected-option').text(`${d}일`).attr('data-value', d);
+    }
+
+    function updateDayOptions(year, month, selectedDay = null) {
+        const $dayMenu = $('#dayDropdownMenu').empty();
+        if (!year || !month) return;
+        const daysInMonth = new Date(year, month, 0).getDate();
+        for (let day = 1; day <= daysInMonth; day++) {
+            const sel = (day === selectedDay) ? ' selected' : '';
+            $dayMenu.append(`<div class="dropdown-item${sel}" data-value="${day}">${day}일</div>`);
+        }
+    }
+
+    function gatherProjectDTO() {
+        const projectName = ($('#projectName').val() || '').trim();
+        const targetAddress = ($('#targetAddress').val() || '').trim();
+        const trafficType = $('#trafficType').val();
+        const daily = parseInt($('#dailyAmount').val(), 10) || 0;
+        const total = parseInt($('#totalAmount').val(), 10) || 0;
+
+        const y = parseInt($('#projectYear').val(), 10);
+        const m = parseInt($('#projectMonth').val(), 10);
+        const d = parseInt($('#projectDay').val(), 10);
+        const startedAt = (y && m && d) ? `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}T00:00:00` : null;
+
+        return {
+            name: projectName,
+            targetAddress: targetAddress,
+            trafficType: trafficType,
+            startedAt: startedAt,
+            dailyTargetTrafficCount: daily,
+            totalTargetTrafficCount: total
+        };
+    }
+
+    function resetForm() {
+        $('#projectForm')[0].reset();
+        $('.add-project-modal .form-input, .add-project-modal .dropdown-toggle').removeClass('error');
+        $('.add-project-modal .error-message').removeClass('show');
+        $('#dailyAmount, #totalAmount, #targetAddress').val('');
+
+        $('#trafficType').val('');
+        $('#trafficTypeDropdown .selected-option').text('선택');
+        $('#trafficTypeDropdownMenu .dropdown-item').removeClass('selected');
+
+        setSubmitEnabled(false);
+    }
+
+    // 초기화
+    $(document).ready(function () {
+        initDropdowns();
+        initPagination();
+        initSearch();
+        initDateSelectors();
+
+        unLoadPreloader(1000);
+
+        loadProjects(0);
+
+        // 완료된 프로젝트 제외 토글 이벤트
+        $('#excludeCompletedSwitch').on('click', function () {
+            $(this).toggleClass('active');
+            const isActive = $(this).hasClass('active');
+            $('#excludeCompleted').val(isActive ? 'true' : 'false');
+            currentData.filters.excludeDailyCompleted = isActive;
+            applyFilters();
+        });
+
+        // 프로젝트 추가 모달 이벤트
+        $('#addProjectBtn').on('click', async function () {
+            $('#addProjectModalOverlay').addClass('show');
+            $('body').css('overflow', 'hidden');
+            resetForm();
+            validateAllFields();
+        });
+
+        $('#addProjectModalClose, #cancelProjectBtn').on('click', function () {
+            $('#addProjectModalOverlay').removeClass('show');
+            $('body').css('overflow', '');
+            resetForm();
+        });
+
+        // 입력 변화 감지
+        $('#projectName, #targetAddress').on('input blur', function () {
+            validateAllFields();
+        });
+
+        $('#dailyAmount, #totalAmount').on('input blur', function () {
+            const daily = parseInt($('#dailyAmount').val(), 10) || 0;
+            const total = parseInt($('#totalAmount').val(), 10) || 0;
+            const $dailyField = $('#dailyAmount');
+            const $dailyError = $dailyField.siblings('.error-message');
+
+            if (daily > 0 && total > 0 && daily > total) {
+                $dailyField.addClass('error');
+                $dailyError.text('일 유입량이 총 유입량보다 클 수 없습니다.').addClass('show');
+            } else {
+                if (daily > 0) {
+                    $dailyField.removeClass('error');
+                    $dailyError.text('일 유입량을 입력해주세요.').removeClass('show');
+                }
+            }
+            validateAllFields();
+        });
+
+        // 프로젝트 생성 API 연결
+        $('#submitProjectBtn').on('click', async function () {
+            const dto = gatherProjectDTO();
+
+            try {
+                const response = await fetch('/api/project/create', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(dto)
+                });
+
+                if (!response.ok) {
+                    const errorMessage = await ErrorUtils.parseError(response);
+                    throw new Error(errorMessage);
+                }
+
+                $('#addProjectModalOverlay').removeClass('show');
+                $('body').css('overflow', '');
+                showInfoToast('프로젝트가 성공적으로 생성되었습니다.');
+
+                resetForm();
+                loadProjects(0);
+
+            } catch (error) {
+                ErrorUtils.showError(error.message);
+            }
+        });
+
+        // 모달 오버레이 클릭 닫기
+        $('.modal-overlay').on('click', function (e) {
+            if ($(this).hasClass('add-project-modal')) {
+                if (e.target === this) {
+                    $(this).removeClass('show');
+                    $('body').css('overflow', '');
+                }
+            }
+        });
+
+        // 초기 토글 상태 설정
+        updateExcludeCompletedToggle();
+    });
+</script>
+
+<script>
+    $('#headerTitle').text('대시보드');
+
+    $(document).on('click', '.card-settings-icon', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const $card = $(this).closest('.project-card');
+        const projectId = $card.data('project-id');
+        window.location.href = `/dashboard/settings?id=${projectId}`;
+    });
+
+    $(document).on('click', '.card-report-icon', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const $card = $(this).closest('.project-card');
+        const projectId = $card.data('project-id');
+        window.location.href = `/dashboard/reporty?id=${projectId}`;
+    });
+
+    $(document).on('click', '.card-delete-icon', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const $card = $(this).closest('.project-card');
+        const projectId = $card.data('project-id');
+
+        showCustomAlert('프로젝트를 삭제하시겠어요?', `삭제시 모든 데이터가 즉시 소멸됩니다.<br><span style="font-size: 14px; color: #ef4444;">※ 금일 발행 건을 제외한 횟수가 자동 환불됩니다.</span>`, [
+            {
+                text: '삭제하기',
+                class: 'alert-modal-button alert-modal-button-primary',
+                action: function () {
+                    loadPreloader(0);
+                    $.ajax({
+                        url: `/api/project/delete?id=${projectId}`,
+                        method: 'DELETE',
+                        contentType: 'application/json',
+                        success: function () {
+                            showCustomAlert('삭제 완료!', '프로젝트를 성공적으로 삭제 했습니다.', [{
+                                text: '닫기',
+                                class: 'alert-modal-button alert-modal-button-secondary',
+                                action: function () {
+                                    window.location.reload();
+                                }
+                            }]);
+                        },
+                        error: function (xhr) {
+                            let msg = '프로젝트를 삭제할 수 없습니다.';
+                            try {
+                                if (xhr.responseJSON?.error?.message) {
+                                    msg = xhr.responseJSON.error.message;
+                                }
+                            } catch (e) {
+                            }
+                            showCustomAlert('삭제 실패', msg);
+                        },
+                        complete: function () {
+                            unLoadPreloader(1000);
+                        }
+                    });
+                }
+            },
+            {
+                text: '닫기',
+                class: 'alert-modal-button alert-modal-button-secondary',
+                action: function () {
+                    hideCustomAlert();
+                }
+            }
+        ]);
+    });
+</script>
+
+<div class="alert-modal-overlay" id="alertModal">
+    <div class="alert-modal-container">
+        <h3 class="alert-modal-title" id="alertModalTitle"></h3>
+        <p class="alert-modal-content" id="alertModalContent"></p>
+        <div class="alert-modal-button-group" id="alertModalButtonGroup"></div>
+    </div>
+</div>
+
+</body>
+</html>
