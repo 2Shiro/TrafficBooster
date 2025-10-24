@@ -56,7 +56,9 @@ public class TrafficSourceService {
      */
     public void updateTrafficSource(TrafficSourceDTO trafficSourceDTO) {
 
-        TrafficSourceEntity trafficSourceEntity = new TrafficSourceEntity();
+
+        TrafficSourceEntity trafficSourceEntity = trafficSourceRepository.findById(trafficSourceDTO.getId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 트래픽 소스를 찾을 수 없습니다. id=" + trafficSourceDTO.getId()));
 
         trafficSourceEntity.setProjectId(trafficSourceDTO.getProjectId());
         trafficSourceEntity.setTrafficSourcePath(trafficSourceDTO.getTrafficSourcePath());

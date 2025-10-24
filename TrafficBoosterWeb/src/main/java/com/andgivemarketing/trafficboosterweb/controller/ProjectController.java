@@ -32,7 +32,6 @@ public class ProjectController {
                 || projectDTO.getName() == null || projectDTO.getName().isBlank()
                 || projectDTO.getTargetAddress() == null  || projectDTO.getTargetAddress().isBlank()
                 || projectDTO.getStartDate() == null
-                || projectDTO.getEndDate() == null
                 || projectDTO.getTrafficType() == null
                 || projectDTO.getDailyTargetTrafficCount() == null
                 || projectDTO.getTotalTargetTrafficCount() == null) {
@@ -66,7 +65,6 @@ public class ProjectController {
                 || projectDTO.getName() == null || projectDTO.getName().isBlank()
                 || projectDTO.getTargetAddress() == null  || projectDTO.getTargetAddress().isBlank()
                 || projectDTO.getStartDate() == null
-                || projectDTO.getEndDate() == null
                 || projectDTO.getStatus() == null
                 || projectDTO.getTrafficType() == null
                 || projectDTO.getDailyTargetTrafficCount() == null
@@ -126,17 +124,5 @@ public class ProjectController {
                     .body(new ErrorResponse(new ErrorResponse.ErrorDetails("프로젝트를 불러오는 중 오류가 발생했습니다.")));
         }
     }
-
-    /**
-     * 프로젝트 진행중으로 변경
-     * @param projectId 프로젝트 id
-     * @return
-     */
-    @PutMapping("/project/start")
-    public ResponseEntity<?> startProject(@RequestParam(required = false, name = "id") Long projectId) {
-
-        return ResponseEntity.ok().build();
-    }
-
 
 }
